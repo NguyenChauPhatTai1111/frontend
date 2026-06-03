@@ -1,6 +1,8 @@
 import { Authenticated, GitHubBanner, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
+import { GamePage } from "./pages/game";
+import { GameGuard } from "./components/GameGuard";
 
 import {
   ErrorComponent,
@@ -29,14 +31,15 @@ import {
 import {
   CategoryCreate,
   CategoryEdit,
-  CategoryList,
   CategoryShow,
+  UserList,
 } from "./pages/categories";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { authProvider } from "./providers/auth";
 import { dataProvider } from "./providers/data";
+import { ProductList } from "./pages/products/list";
 
 function App() {
   return (
@@ -54,6 +57,16 @@ function App() {
                 routerProvider={routerProvider}
                 authProvider={authProvider}
                 resources={[
+                  {
+                    name: "users",
+                    list: "/users",
+                  },
+                  {
+                    name: "products",
+                    list: "/products",
+                    create: "/products/create",
+                    edit: "/products/edit/:id",
+                  },
                   {
                     name: "blog_posts",
                     list: "/blog-posts",
@@ -81,56 +94,94 @@ function App() {
                   projectId: "RdZJDB-tFLIDc-rMQ7LT",
                 }}
               >
-                <Routes>
+               <Routes>
+                {/* Game riêng không có Layout */}
+                <Route
+                  path="/game"
+                  element={
+                    <Authenticated
+                      key="authenticated-game"
+                      fallback={<CatchAllNavigate to="/login" />}
+                    >
+                      <GamePage />
+                    </Authenticated>
+                  }
+                />
+
+                {/* Các trang admin có menu */}
+                <Route
+                  element={
+                    <Authenticated
+                      key="authenticated-inner"
+                      fallback={<CatchAllNavigate to="/login" />}
+                    >
+                      <ThemedLayout Header={Header}>
+                        <Outlet />
+                      </ThemedLayout>
+                    </Authenticated>
+                  }
+                >
                   <Route
-                    element={
-                      <Authenticated
-                        key="authenticated-inner"
-                        fallback={<CatchAllNavigate to="/login" />}
-                      >
-                        <ThemedLayout Header={Header}>
-                          <Outlet />
-                        </ThemedLayout>
-                      </Authenticated>
-                    }
-                  >
+                    index
+                    element={<CatchAllNavigate to="/game" />}
+                  />
+
+                  <Route path="/users">
                     <Route
                       index
-                      element={<NavigateToResource resource="blog_posts" />}
-                    />
-                    <Route path="/blog-posts">
-                      <Route index element={<BlogPostList />} />
-                      <Route path="create" element={<BlogPostCreate />} />
-                      <Route path="edit/:id" element={<BlogPostEdit />} />
-                      <Route path="show/:id" element={<BlogPostShow />} />
-                    </Route>
-                    <Route path="/categories">
-                      <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
-                    </Route>
-                    <Route path="*" element={<ErrorComponent />} />
-                  </Route>
-                  <Route
-                    element={
-                      <Authenticated
-                        key="authenticated-outer"
-                        fallback={<Outlet />}
-                      >
-                        <NavigateToResource />
-                      </Authenticated>
-                    }
-                  >
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route
-                      path="/forgot-password"
-                      element={<ForgotPassword />}
+                      element={
+                        <GameGuard>
+                          <UserList />
+                        </GameGuard>
+                      }
                     />
                   </Route>
-                </Routes>
 
+                  <Route path="/products">
+                    <Route
+                      index
+                      element={
+                        <GameGuard>
+                          <ProductList />
+                        </GameGuard>
+                      }
+                    />
+                  </Route>
+
+                  <Route path="/blog-posts">
+                    <Route index element={<BlogPostList />} />
+                    <Route path="create" element={<BlogPostCreate />} />
+                    <Route path="edit/:id" element={<BlogPostEdit />} />
+                    <Route path="show/:id" element={<BlogPostShow />} />
+                  </Route>
+
+                  <Route path="/categories">
+                    <Route index element={<UserList />} />
+                    <Route path="create" element={<CategoryCreate />} />
+                    <Route path="edit/:id" element={<CategoryEdit />} />
+                    <Route path="show/:id" element={<CategoryShow />} />
+                  </Route>
+
+                  <Route path="*" element={<ErrorComponent />} />
+                </Route>
+
+                {/* Login */}
+                <Route
+                  element={
+                    <Authenticated
+                      key="authenticated-outer"
+                      fallback={<Outlet />}
+                    >
+                      <NavigateToResource resource="users" />
+                    </Authenticated>
+                  }
+                >
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                </Route>
+
+              </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler />

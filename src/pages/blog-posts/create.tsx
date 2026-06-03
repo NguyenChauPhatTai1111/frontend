@@ -13,7 +13,7 @@ export const BlogPostCreate = () => {
   } = useForm({});
 
   const { autocompleteProps: categoryAutocompleteProps } = useAutocomplete({
-    resource: "categories",
+    resource: "users",
   });
 
   return (
@@ -24,7 +24,7 @@ export const BlogPostCreate = () => {
         autoComplete="off"
       >
         <TextField
-          {...register("title", {
+          {...register("Title", {
             required: "This field is required",
           })}
           error={!!(errors as any)?.title}
@@ -34,7 +34,7 @@ export const BlogPostCreate = () => {
           InputLabelProps={{ shrink: true }}
           type="text"
           label={"Title"}
-          name="title"
+          name="Title"
         />
         <TextField
           {...register("content", {

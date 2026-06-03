@@ -18,7 +18,7 @@ export const CategoryCreate = () => {
         autoComplete="off"
       >
         <TextField
-          {...register("title", {
+          {...register("Title", {
             required: "This field is required",
           })}
           error={!!(errors as any)?.title}
@@ -28,7 +28,7 @@ export const CategoryCreate = () => {
           InputLabelProps={{ shrink: true }}
           type="text"
           label={"Title"}
-          name="title"
+          name="Title"
         />
       </Box>
     </Create>

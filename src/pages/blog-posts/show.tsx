@@ -18,7 +18,7 @@ export const BlogPostShow = () => {
     result: category,
     query: { isLoading: categoryIsLoading },
   } = useOne({
-    resource: "categories",
+    resource: "categoriescc",
     id: record?.category?.id || "",
     queryOptions: {
       enabled: !!record,

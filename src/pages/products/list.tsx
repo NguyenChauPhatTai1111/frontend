@@ -8,9 +8,9 @@ import {
   useDataGrid,
 } from "@refinedev/mui";
 
-export const UserList = () => {
+export const ProductList = () => {
   const { dataGridProps } = useDataGrid({
-    resource: "users",
+    resource: "products",
   });
 
   const columns = React.useMemo<GridColDef[]>(
@@ -27,10 +27,10 @@ export const UserList = () => {
         minWidth: 200,
       },
       {
-        field: "email",
-        headerName: "Email",
+        field: "price",
+        headerName: "Price",
         flex: 1,
-        minWidth: 250,
+        minWidth: 150,
       },
       {
         field: "actions",
@@ -52,7 +52,7 @@ export const UserList = () => {
   return (
     <List>
       <div style={{ marginBottom: 16 }}>
-        <h1>Users</h1>
+        <h1>Products</h1>
       </div>
       <DataGrid {...dataGridProps} columns={columns} />
     </List>

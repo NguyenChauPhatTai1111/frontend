@@ -16,7 +16,7 @@ export const BlogPostEdit = () => {
   const blogPostsData = query?.data?.data;
 
   const { autocompleteProps: categoryAutocompleteProps } = useAutocomplete({
-    resource: "categories",
+    resource: "users",
     defaultValue: blogPostsData?.category?.id,
   });
 
@@ -28,7 +28,7 @@ export const BlogPostEdit = () => {
         autoComplete="off"
       >
         <TextField
-          {...register("title", {
+          {...register("Title", {
             required: "This field is required",
           })}
           error={!!(errors as any)?.title}
@@ -38,7 +38,7 @@ export const BlogPostEdit = () => {
           InputLabelProps={{ shrink: true }}
           type="text"
           label={"Title"}
-          name="title"
+          name="Title"
         />
         <TextField
           {...register("content", {

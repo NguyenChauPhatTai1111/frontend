@@ -18,13 +18,11 @@ export const BlogPostList = () => {
     result: { data: categories },
     query: { isLoading: categoryIsLoading },
   } = useMany({
-    resource: "categories",
+    resource: "users",
     ids:
       result?.data?.map((item: any) => item?.category?.id).filter(Boolean) ??
       [],
-    queryOptions: {
-      enabled: !!result?.data,
-    },
+    
   });
 
   const columns = React.useMemo<GridColDef[]>(
@@ -39,7 +37,7 @@ export const BlogPostList = () => {
         headerAlign: "left",
       },
       {
-        field: "title",
+        field: "Title",
         headerName: "Title",
         minWidth: 200,
         display: "flex",
