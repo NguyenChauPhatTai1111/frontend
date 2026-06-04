@@ -1,11 +1,11 @@
-import { Stack, Typography } from "@mui/material";
-import { useOne, useShow } from "@refinedev/core";
+import { Stack, Typography } from '@mui/material';
+import { useOne, useShow } from '@refinedev/core';
 import {
   DateField,
   MarkdownField,
   Show,
   TextFieldComponent as TextField,
-} from "@refinedev/mui";
+} from '@refinedev/mui';
 
 export const BlogPostShow = () => {
   const { query } = useShow({});
@@ -18,8 +18,8 @@ export const BlogPostShow = () => {
     result: category,
     query: { isLoading: categoryIsLoading },
   } = useOne({
-    resource: "categoriescc",
-    id: record?.category?.id || "",
+    resource: 'categoriescc',
+    id: record?.category?.id || '',
     queryOptions: {
       enabled: !!record,
     },
@@ -29,30 +29,30 @@ export const BlogPostShow = () => {
     <Show isLoading={isLoading}>
       <Stack gap={1}>
         <Typography variant="body1" fontWeight="bold">
-          {"ID"}
+          {'ID'}
         </Typography>
         <TextField value={record?.id} />
 
         <Typography variant="body1" fontWeight="bold">
-          {"Title"}
+          {'Title'}
         </Typography>
         <TextField value={record?.title} />
 
         <Typography variant="body1" fontWeight="bold">
-          {"Content"}
+          {'Content'}
         </Typography>
         <MarkdownField value={record?.content} />
 
         <Typography variant="body1" fontWeight="bold">
-          {"Category"}
+          {'Category'}
         </Typography>
         {categoryIsLoading ? <>Loading...</> : <>{category?.title}</>}
         <Typography variant="body1" fontWeight="bold">
-          {"Status"}
+          {'Status'}
         </Typography>
         <TextField value={record?.status} />
         <Typography variant="body1" fontWeight="bold">
-          {"CreatedAt"}
+          {'CreatedAt'}
         </Typography>
         <DateField value={record?.createdAt} />
       </Stack>

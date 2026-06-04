@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { get, post } from "../apiClient";
+import { useEffect, useState } from 'react';
+import { get, post } from '../apiClient';
 
 interface User {
   id: number;
@@ -16,11 +16,11 @@ export function useUsers() {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const response = await get("/users");
+        const response = await get('/users');
         setUsers(response || []);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch users");
+        setError(err instanceof Error ? err.message : 'Failed to fetch users');
         console.error(err);
       } finally {
         setLoading(false);
@@ -32,11 +32,11 @@ export function useUsers() {
 
   const addUser = async (name: string, email: string) => {
     try {
-      const newUser = await post("/users", { name, email });
+      const newUser = await post('/users', { name, email });
       setUsers([...users, newUser]);
       return newUser;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to add user");
+      setError(err instanceof Error ? err.message : 'Failed to add user');
       console.error(err);
       throw err;
     }

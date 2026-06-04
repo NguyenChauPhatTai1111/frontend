@@ -1,4 +1,4 @@
-import { AuthPage } from "@refinedev/mui";
+import { AuthPage } from '@refinedev/mui';
 
 export const ForgotPassword = () => {
   return <AuthPage type="forgotPassword" />;

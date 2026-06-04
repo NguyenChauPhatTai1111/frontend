@@ -1,15 +1,15 @@
-import type { AuthProvider } from "@refinedev/core";
-import { TOKEN_KEY } from "./constants";
+import type { AuthProvider } from '@refinedev/core';
+import { TOKEN_KEY } from './constants';
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = 'http://localhost:8000/api';
 
 export const authProvider: AuthProvider = {
   login: async ({ email, password }) => {
     try {
       const response = await fetch(`${API_URL}/login`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email,
@@ -23,25 +23,25 @@ export const authProvider: AuthProvider = {
         return {
           success: false,
           error: {
-            name: "LoginError",
-            message: data.message || "Đăng nhập thất bại",
+            name: 'LoginError',
+            message: data.message || 'Đăng nhập thất bại',
           },
         };
       }
 
       localStorage.setItem(TOKEN_KEY, data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem('user', JSON.stringify(data.user));
 
       return {
         success: true,
-        redirectTo: "/game",
+        redirectTo: '/game',
       };
     } catch (error) {
       return {
         success: false,
         error: {
-          name: "NetworkError",
-          message: "Không kết nối được tới server",
+          name: 'NetworkError',
+          message: 'Không kết nối được tới server',
         },
       };
     }
@@ -49,12 +49,12 @@ export const authProvider: AuthProvider = {
 
   logout: async () => {
     localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem("user");
-  localStorage.removeItem("gamePassed");
+    localStorage.removeItem('user');
+    localStorage.removeItem('gamePassed');
 
     return {
       success: true,
-      redirectTo: "/login",
+      redirectTo: '/login',
     };
   },
 
@@ -70,14 +70,14 @@ export const authProvider: AuthProvider = {
     return {
       authenticated: false,
       logout: true,
-      redirectTo: "/login",
+      redirectTo: '/login',
     };
   },
 
   getPermissions: async () => null,
 
   getIdentity: async () => {
-    const user = localStorage.getItem("user");
+    const user = localStorage.getItem('user');
 
     if (!user) {
       return null;
@@ -91,12 +91,12 @@ export const authProvider: AuthProvider = {
 
     if ((error as any)?.status === 401) {
       localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem("user");
-      localStorage.removeItem("gamePassed");
-      
+      localStorage.removeItem('user');
+      localStorage.removeItem('gamePassed');
+
       return {
         logout: true,
-        redirectTo: "/login",
+        redirectTo: '/login',
       };
     }
 

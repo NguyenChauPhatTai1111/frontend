@@ -1,40 +1,40 @@
-import React from "react";
-import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import React from 'react';
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import {
   DeleteButton,
   EditButton,
   List,
   ShowButton,
   useDataGrid,
-} from "@refinedev/mui";
+} from '@refinedev/mui';
 
 export const UserList = () => {
   const { dataGridProps } = useDataGrid({
-    resource: "users",
+    resource: 'users',
   });
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
       {
-        field: "id",
-        headerName: "ID",
+        field: 'id',
+        headerName: 'ID',
         width: 100,
       },
       {
-        field: "name",
-        headerName: "Name",
+        field: 'name',
+        headerName: 'Name',
         flex: 1,
         minWidth: 200,
       },
       {
-        field: "email",
-        headerName: "Email",
+        field: 'email',
+        headerName: 'Email',
         flex: 1,
         minWidth: 250,
       },
       {
-        field: "actions",
-        headerName: "Actions",
+        field: 'actions',
+        headerName: 'Actions',
         minWidth: 150,
         sortable: false,
         renderCell: ({ row }) => (
@@ -46,7 +46,7 @@ export const UserList = () => {
         ),
       },
     ],
-    []
+    [],
   );
 
   return (

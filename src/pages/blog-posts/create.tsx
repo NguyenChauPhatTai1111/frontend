@@ -1,7 +1,7 @@
-import { Autocomplete, Box, MenuItem, Select, TextField } from "@mui/material";
-import { Create, useAutocomplete } from "@refinedev/mui";
-import { useForm } from "@refinedev/react-hook-form";
-import { Controller } from "react-hook-form";
+import { Autocomplete, Box, MenuItem, Select, TextField } from '@mui/material';
+import { Create, useAutocomplete } from '@refinedev/mui';
+import { useForm } from '@refinedev/react-hook-form';
+import { Controller } from 'react-hook-form';
 
 export const BlogPostCreate = () => {
   const {
@@ -13,19 +13,19 @@ export const BlogPostCreate = () => {
   } = useForm({});
 
   const { autocompleteProps: categoryAutocompleteProps } = useAutocomplete({
-    resource: "users",
+    resource: 'users',
   });
 
   return (
     <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
       <Box
         component="form"
-        sx={{ display: "flex", flexDirection: "column" }}
+        sx={{ display: 'flex', flexDirection: 'column' }}
         autoComplete="off"
       >
         <TextField
-          {...register("Title", {
-            required: "This field is required",
+          {...register('Title', {
+            required: 'This field is required',
           })}
           error={!!(errors as any)?.title}
           helperText={(errors as any)?.title?.message}
@@ -33,12 +33,12 @@ export const BlogPostCreate = () => {
           fullWidth
           InputLabelProps={{ shrink: true }}
           type="text"
-          label={"Title"}
+          label={'Title'}
           name="Title"
         />
         <TextField
-          {...register("content", {
-            required: "This field is required",
+          {...register('content', {
+            required: 'This field is required',
           })}
           error={!!(errors as any)?.content}
           helperText={(errors as any)?.content?.message}
@@ -46,13 +46,13 @@ export const BlogPostCreate = () => {
           fullWidth
           InputLabelProps={{ shrink: true }}
           multiline
-          label={"Content"}
+          label={'Content'}
           name="content"
         />
         <Controller
           control={control}
-          name={"category.id"}
-          rules={{ required: "This field is required" }}
+          name={'category.id'}
+          rules={{ required: 'This field is required' }}
           // eslint-disable-next-line
           defaultValue={null as any}
           render={({ field }) => (
@@ -66,18 +66,18 @@ export const BlogPostCreate = () => {
                 return (
                   categoryAutocompleteProps?.options?.find((p) => {
                     const itemId =
-                      typeof item === "object"
+                      typeof item === 'object'
                         ? item?.id?.toString()
                         : item?.toString();
                     const pId = p?.id?.toString();
                     return itemId === pId;
-                  })?.title ?? ""
+                  })?.title ?? ''
                 );
               }}
               isOptionEqualToValue={(option, value) => {
                 const optionId = option?.id?.toString();
                 const valueId =
-                  typeof value === "object"
+                  typeof value === 'object'
                     ? value?.id?.toString()
                     : value?.toString();
                 return value === undefined || optionId === valueId;
@@ -85,7 +85,7 @@ export const BlogPostCreate = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label={"Category"}
+                  label={'Category'}
                   margin="normal"
                   variant="outlined"
                   error={!!(errors as any)?.category?.id}
@@ -103,8 +103,8 @@ export const BlogPostCreate = () => {
             return (
               <Select
                 {...field}
-                value={field?.value || "draft"}
-                label={"Status"}
+                value={field?.value || 'draft'}
+                label={'Status'}
               >
                 <MenuItem value="draft">Draft</MenuItem>
                 <MenuItem value="published">Published</MenuItem>
