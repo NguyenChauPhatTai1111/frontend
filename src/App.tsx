@@ -5,7 +5,7 @@ import { GamePage } from './pages/game';
 import { GameGuard } from './components/GameGuard';
 import { ThemeLayoutV2 } from './components/theme/ThemedLayoutV2';
 import { ThemeProvider } from '@mui/material/styles';
-import  theme  from '@/components/ErrorTheme/createTheme';
+import theme from '@/components/ErrorTheme/createTheme';
 import {
   ErrorComponent,
   RefineSnackbarProvider,
@@ -34,6 +34,7 @@ import {
   CategoryShow,
   UserList,
 } from './pages/categories';
+import { ChatBoxProduct } from './pages/chatproduct/ChatBoxProduct';
 import { ForgotPassword } from './pages/forgotPassword';
 import { Login } from './pages/login';
 import { Register } from './pages/register';
@@ -61,6 +62,10 @@ function App() {
                     {
                       name: 'users',
                       list: '/users',
+                    },
+                    {
+                      name: 'chatBoxProduct',
+                      list: '/chatBoxProduct',
                     },
                     {
                       name: 'products',
@@ -132,7 +137,16 @@ function App() {
                           }
                         />
                       </Route>
-
+                      <Route path="/chatBoxProduct">
+                        <Route
+                          index
+                          element={
+                            <GameGuard>
+                              <ChatBoxProduct />
+                            </GameGuard>
+                          }
+                        />
+                      </Route>
                       <Route path="/products">
                         <Route
                           index
