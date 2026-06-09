@@ -11,7 +11,11 @@ import {
   RefineSnackbarProvider,
   useNotificationProvider,
 } from '@refinedev/mui';
-
+import PeopleIcon from '@mui/icons-material/People';
+import ChatIcon from '@mui/icons-material/Chat';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import ProductIcon from '@mui/icons-material/ProductionQuantityLimits';
 import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import routerProvider, {
@@ -41,6 +45,10 @@ import { Register } from './pages/register';
 import { authProvider } from './providers/auth';
 import { dataProvider } from './providers/data';
 import { ProductList } from './pages/products/list';
+import { ProductDetail } from './pages/products/ProductDetail';
+import { MusicGenreList } from './pages/Music/list';
+import { MusicGenreDetail } from './pages/Music/MusicGenreDetail';
+import { MyMusic } from './pages/Music/MyMusic';
 
 function App() {
   return (
@@ -62,16 +70,41 @@ function App() {
                     {
                       name: 'users',
                       list: '/users',
+                      meta: {
+                        icon: <PeopleIcon />,
+                      },
+                    },
+                    {
+                      name: 'music-genres',
+                      list: '/music-genres',
+                      meta: {
+                        icon: <MusicNoteIcon />,
+                      },
+                    },
+                    {
+                      name: 'my-music',
+                      list: '/my-music',
+                      meta: {
+                        icon: <FavoriteIcon />,
+                        label: 'My Music',
+                      },
                     },
                     {
                       name: 'chatBoxProduct',
                       list: '/chatBoxProduct',
+                      meta: {
+                        icon: <ChatIcon />,
+                      },
                     },
                     {
                       name: 'products',
                       list: '/products',
                       create: '/products/create',
                       edit: '/products/edit/:id',
+                      show: '/products/show/:id',
+                      meta: {
+                        icon: <ProductIcon />,
+                      },
                     },
                     {
                       name: 'blog_posts',
@@ -80,6 +113,7 @@ function App() {
                       edit: '/blog-posts/edit/:id',
                       show: '/blog-posts/show/:id',
                       meta: {
+                        icon: <ProductIcon />,
                         canDelete: true,
                       },
                     },
@@ -156,8 +190,25 @@ function App() {
                             </GameGuard>
                           }
                         />
+
+                        <Route
+                          path="show/:id"
+                          element={
+                            <GameGuard>
+                              <ProductDetail />
+                            </GameGuard>
+                          }
+                        />
                       </Route>
 
+                      <Route path="/music-genres">
+                        <Route index element={<MusicGenreList />} />
+
+                        <Route path=":id" element={<MusicGenreDetail />} />
+                      </Route>
+                      <Route path="/my-music">
+                        <Route index element={<MyMusic />} />
+                      </Route>
                       <Route path="/blog-posts">
                         <Route index element={<BlogPostList />} />
                         <Route path="create" element={<BlogPostCreate />} />

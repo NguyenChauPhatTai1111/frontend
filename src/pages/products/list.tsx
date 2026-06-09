@@ -7,11 +7,16 @@ import {
   ShowButton,
   useDataGrid,
 } from '@refinedev/mui';
+import Button from '@mui/material/Button/Button';
+import Box from '@mui/material/Box/Box';
+import AddIcon from '@mui/icons-material/Add';
+import { ProductCreateModal } from './ProductCreateModal';
 
 export const ProductList = () => {
   const { dataGridProps } = useDataGrid({
     resource: 'products',
   });
+  const [openCreate, setOpenCreate] = React.useState(false);
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
@@ -33,6 +38,12 @@ export const ProductList = () => {
         minWidth: 150,
       },
       {
+        field: 'discount_price',
+        headerName: 'Discount Price',
+        flex: 1,
+        minWidth: 150,
+      },
+      {
         field: 'actions',
         headerName: 'Actions',
         minWidth: 150,
@@ -50,11 +61,33 @@ export const ProductList = () => {
   );
 
   return (
-    <List>
-      <div style={{ marginBottom: 16 }}>
-        <h1>Products</h1>
-      </div>
-      <DataGrid {...dataGridProps} columns={columns} />
-    </List>
+    <>
+      <List>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <div style={{ marginBottom: 16 }}>
+            <h1>Products</h1>
+          </div>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => setOpenCreate(true)}
+            style={{ marginBottom: 16 }}
+          >
+            Create Product
+          </Button>
+        </Box>
+        <DataGrid {...dataGridProps} columns={columns} />
+      </List>
+      <ProductCreateModal
+        open={openCreate}
+        onClose={() => setOpenCreate(false)}
+      />
+    </>
   );
 };

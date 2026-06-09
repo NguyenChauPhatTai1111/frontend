@@ -1,2 +1,2 @@
 export const API_URL = 'http://localhost:8000/api';
-export const TOKEN_KEY = 'refine-auth';
+export const TOKEN_KEY = 'access_token';

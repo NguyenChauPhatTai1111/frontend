@@ -1,14 +1,7 @@
 import { useState } from 'react';
-import {
-  Box,
-  TextField,
-  IconButton,
-  Typography,
-  Stack,
-  Divider,
-  Avatar,
-} from '@mui/material';
+import { Box, TextField, IconButton, Typography, Stack } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { AppResource } from '@/resource';
 
 interface Message {
   id: number;
@@ -30,11 +23,11 @@ export const ChatBoxProduct = () => {
   const [input, setInput] = useState('');
 
   // 👉 CALL API GET PRODUCT
-  const fetchProducts = async () => {
-    const res = await fetch('http://localhost:8000/api/products');
-    const data: Product[] = await res.json();
-    return data;
-  };
+  // const fetchProducts = async () => {
+  //   const res = await fetch('http://localhost:8000/api/products');
+  //   const data: Product[] = await res.json();
+  //   return data;
+  // };
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -53,11 +46,11 @@ export const ChatBoxProduct = () => {
     try {
       // 🧠 CASE 1: keyword product
       if (userText.toLowerCase().trim() === 'product') {
-        const res = await fetch('http://localhost:8000/api/products');
+        const res = await fetch(AppResource.Products);
         const products = await res.json();
 
         const productText = products
-          .map((p: any) => `🛒 ${p.name} - ${p.price}`)
+          .map((p: Product) => ` ${p.name} - ${p.price}`)
           .join('\n');
 
         setMessages((prev) => [
@@ -73,7 +66,7 @@ export const ChatBoxProduct = () => {
       }
 
       // 🧠 CASE 2: AI chat
-      const res = await fetch('http://localhost:8000/api/chat', {
+      const res = await fetch(AppResource.Chat, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +91,7 @@ export const ChatBoxProduct = () => {
         ...prev,
         {
           id: Date.now() + 1,
-          text: 'Lỗi server 😢',
+          text: 'Lỗi server ',
           sender: 'bot',
         },
       ]);
