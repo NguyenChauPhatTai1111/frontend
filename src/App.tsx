@@ -49,7 +49,9 @@ import { ProductDetail } from './pages/products/ProductDetail';
 import { MusicGenreList } from './pages/Music/list';
 import { MusicGenreDetail } from './pages/Music/MusicGenreDetail';
 import { MyMusic } from './pages/Music/MyMusic';
-
+import { MoviesList } from './pages/movie/list';
+import MovieIcon from '@mui/icons-material/Movie';
+import { MovieDetail } from './pages/movie/MovieDetail';
 function App() {
   return (
     <BrowserRouter>
@@ -80,6 +82,12 @@ function App() {
                       meta: {
                         icon: <MusicNoteIcon />,
                       },
+                    },
+                    {
+                      name: 'youtube-jobs',
+                      list: '/youtube-jobs',
+                      create: '/youtube-jobs/create',
+                      edit: '/youtube-jobs/edit/:id',
                     },
                     {
                       name: 'my-music',
@@ -124,6 +132,15 @@ function App() {
                       edit: '/categories/edit/:id',
                       show: '/categories/show/:id',
                       meta: {
+                        canDelete: true,
+                      },
+                    },
+                    {
+                      name: 'movies',
+                      list: '/movies',
+                      show: '/movies/:slug',
+                      meta: {
+                        icon: <MovieIcon />,
                         canDelete: true,
                       },
                     },
@@ -209,6 +226,7 @@ function App() {
                       <Route path="/my-music">
                         <Route index element={<MyMusic />} />
                       </Route>
+
                       <Route path="/blog-posts">
                         <Route index element={<BlogPostList />} />
                         <Route path="create" element={<BlogPostCreate />} />
@@ -221,6 +239,11 @@ function App() {
                         <Route path="create" element={<CategoryCreate />} />
                         <Route path="edit/:id" element={<CategoryEdit />} />
                         <Route path="show/:id" element={<CategoryShow />} />
+                      </Route>
+
+                      <Route path="/movies">
+                        <Route index element={<MoviesList />} />
+                        <Route path="/movies/:slug" element={<MovieDetail />} />
                       </Route>
 
                       <Route path="*" element={<ErrorComponent />} />
