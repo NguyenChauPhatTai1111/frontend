@@ -52,6 +52,7 @@ import { MyMusic } from './pages/Music/MyMusic';
 import { MoviesList } from './pages/movie/list';
 import MovieIcon from '@mui/icons-material/Movie';
 import { MovieDetail } from './pages/movie/MovieDetail';
+import QuizGamePage from './pages/quizGame';
 function App() {
   return (
     <BrowserRouter>
@@ -144,6 +145,10 @@ function App() {
                         canDelete: true,
                       },
                     },
+                    {
+                      name: 'Quiz Game',
+                      list: '/quiz-game',
+                    },
                   ]}
                   options={{
                     syncWithLocation: true,
@@ -213,6 +218,17 @@ function App() {
                           element={
                             <GameGuard>
                               <ProductDetail />
+                            </GameGuard>
+                          }
+                        />
+                      </Route>
+
+                      <Route path="/quiz-game">
+                        <Route
+                          index
+                          element={
+                            <GameGuard>
+                              <QuizGamePage />
                             </GameGuard>
                           }
                         />
