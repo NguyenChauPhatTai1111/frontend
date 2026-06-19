@@ -13,3 +13,19 @@ export const getQuizDetail = async (id: number) => {
 
   return data;
 };
+
+export const submitQuiz = async (quizId: number, answers: any[]) => {
+  const token = localStorage.getItem('MXwyMDI2LTA2LTE5IDA5OjUwOjU5');
+
+  const res = await axios.post(
+    `${API_URL}/quizzes/${quizId}/submit`,
+    { answers },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return res.data;
+};

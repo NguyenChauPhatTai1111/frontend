@@ -1,36 +1,81 @@
 import {
   Box,
   Button,
-  Radio,
+  Typography,
+  Paper,
+  Stack,
   RadioGroup,
   FormControlLabel,
-  Typography,
+  Radio,
+  LinearProgress,
 } from '@mui/material';
-
 import { useEffect, useState } from 'react';
 
-import { getQuizDetail } from '@/hooks/quiz.service';
+import { getQuizDetail, submitQuiz } from '@/hooks/quiz.service';
+import ModalFinishTest from './modalFinishText';
+import QuizReview from './QuizReview';
+import QuizResult from './finished';
 
 interface Props {
   quizId: number;
+  onBack: () => void;
 }
 
-export default function QuizPlay({ quizId }: Props) {
-  const [quiz, setQuiz] = useState<any>();
-  const [timeLeft, setTimeLeft] = useState(15);
-
+export default function QuizPlay({ quizId, onBack }: Props) {
+  const [quiz, setQuiz] = useState<any>(null);
+  const TOTAL_TIME = 10 * 1; // 10 phút
+  const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
   const [isTimeUp, setIsTimeUp] = useState(false);
+  const [reviewMode, setReviewMode] = useState(false);
   const [selected, setSelected] = useState<Record<number, number>>({});
-
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [openSubmitDialog, setOpenSubmitDialog] = useState(false);
+  const [finished, setFinished] = useState(false);
+  const [result, setResult] = useState<any>(null);
+  const isLocked = timeLeft <= 0;
   useEffect(() => {
     getQuizDetail(quizId).then(setQuiz);
   }, [quizId]);
+  const currentQuestion = quiz?.questions?.[currentQuestionIndex];
+
+  // const nextQuestion = () => {
+  //   if (!quiz) return;
+
+  //   if (currentQuestionIndex < quiz.questions.length - 1) {
+  //     setCurrentQuestionIndex((prev) => prev + 1);
+  //     setTimeLeft(15);
+  //     setIsTimeUp(false);
+  //   } else {
+  //     setFinished(true);
+  //   }
+  // };
+
+  const handleAnswer = (answerId: number) => {
+    if (finished) return;
+
+    setSelected((prev) => ({
+      ...prev,
+      [currentQuestion.id]: answerId,
+    }));
+
+    // setTimeout(() => {
+    //   nextQuestion();
+    // }, 1500);
+  };
+
+  const handleRetry = () => {
+    setFinished(false);
+    setCurrentQuestionIndex(0);
+    setTimeLeft(15);
+    setIsTimeUp(false);
+    setSelected({});
+  };
 
   useEffect(() => {
-    if (!quiz) return;
+    if (finished) return;
 
     if (timeLeft <= 0) {
-      setIsTimeUp(true);
+      setOpenSubmitDialog(true);
       return;
     }
 
@@ -39,76 +84,266 @@ export default function QuizPlay({ quizId }: Props) {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [timeLeft, quiz]);
+  }, [timeLeft, finished]);
+
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${m}:${sec.toString().padStart(2, '0')}`;
+  };
+
   if (!quiz) return null;
 
+  const unansweredQuestions = quiz.questions.filter(
+    (q: any) => !selected[q.id],
+  );
+
+  const canSubmit = unansweredQuestions.length === 0;
+  const correctCount = quiz.questions.filter((question: any) => {
+    const selectedAnswer = selected[question.id];
+
+    return question.answers.some(
+      (answer: any) => answer.id === selectedAnswer && answer.is_correct,
+    );
+  }).length;
+
+  const wrongCount = quiz.questions.length - correctCount;
+  const pointPerQuestion = 10 / quiz.questions.length;
+
+  const score = Math.round(correctCount * pointPerQuestion * 100) / 100;
+
+  const handlePrevQuestion = () => {
+    if (currentQuestionIndex === 0) return;
+
+    setCurrentQuestionIndex((prev) => prev - 1);
+    setTimeLeft(15);
+    setIsTimeUp(false);
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex >= quiz.questions.length - 1) return;
+
+    setCurrentQuestionIndex((prev) => prev + 1);
+    setTimeLeft(15);
+    setIsTimeUp(false);
+  };
+
+  const handleSubmitQuiz = async () => {
+    console.log('HANDLE SUBMIT');
+
+    try {
+      const answers = Object.entries(selected).map(
+        ([questionId, answerId]) => ({
+          question_id: Number(questionId),
+          answer_id: answerId,
+        }),
+      );
+
+      console.log('ANSWERS', answers);
+
+      const data = await submitQuiz(quiz.id, answers);
+
+      console.log('RESULT', data);
+
+      setResult(data);
+      setOpenSubmitDialog(false);
+      setFinished(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (reviewMode) {
+    return (
+      <QuizReview
+        quiz={quiz}
+        selected={selected}
+        unansweredQuestions={unansweredQuestions}
+        onBack={() => setReviewMode(false)}
+      />
+    );
+  }
+
+  if (finished) {
+    return (
+      <QuizResult
+        score={result?.score ?? score}
+        correctCount={result?.correct_answers ?? correctCount}
+        wrongCount={result?.wrong_answers ?? wrongCount}
+        totalQuestions={quiz.questions.length}
+        percentage={result?.percentage ?? 0}
+        onRetry={handleRetry}
+        onReview={() => setReviewMode(true)}
+        onBack={onBack}
+      />
+    );
+  }
+
   return (
-    <Box>
-      <Typography variant="h4">{quiz.title}</Typography>
-
-      <Typography
-        variant="h5"
-        color={timeLeft <= 5 ? 'error.main' : 'primary.main'}
+    <>
+      <Box
+        sx={{
+          maxWidth: 900,
+          mx: 'auto',
+          p: 3,
+        }}
       >
-        ⏰ {timeLeft}s
-      </Typography>
-      {isTimeUp && (
-        <Typography color="error.main" fontWeight={700}>
-          ⛔ Hết giờ!
-        </Typography>
-      )}
+        {/* Header */}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={3}
+        >
+          <Button variant="outlined" onClick={onBack}>
+            ← Danh sách Quiz
+          </Button>
 
-      {quiz.questions.map((question: any, index: number) => (
-        <Box key={question.id} mb={4}>
-          <Typography>
-            {index + 1}. {question.question}
+          <Typography variant="h5" fontWeight={700}>
+            {quiz.title}
+          </Typography>
+        </Stack>
+
+        {/* Progress */}
+        <Paper
+          elevation={2}
+          sx={{
+            p: 2,
+            mb: 3,
+            borderRadius: 3,
+          }}
+        >
+          <Stack direction="row" justifyContent="space-between" mb={1}>
+            <Typography fontWeight={600}>
+              Câu {currentQuestionIndex + 1}/{quiz.questions.length}
+            </Typography>
+
+            <Typography
+              fontWeight={700}
+              sx={{
+                color: timeLeft <= 30 ? 'error.main' : 'primary.main',
+
+                animation:
+                  timeLeft > 0 && timeLeft <= 10
+                    ? 'countdownPulse 1s ease-in-out infinite'
+                    : 'none',
+
+                '@keyframes countdownPulse': {
+                  '0%': {
+                    transform: 'scale(1)',
+                  },
+                  '50%': {
+                    transform: 'scale(1.05)',
+                  },
+                  '100%': {
+                    transform: 'scale(1)',
+                  },
+                },
+              }}
+            >
+              ⏰ {formatTime(timeLeft)}
+            </Typography>
+          </Stack>
+
+          <LinearProgress
+            variant="determinate"
+            value={((currentQuestionIndex + 1) / quiz.questions.length) * 100}
+            sx={{
+              height: 10,
+              borderRadius: 999,
+            }}
+          />
+        </Paper>
+
+        {/* Question Card */}
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            borderRadius: 4,
+          }}
+        >
+          <Typography variant="h5" fontWeight={700} mb={3}>
+            {currentQuestion.question}
           </Typography>
 
           <RadioGroup
-            value={selected[question.id] ?? ''}
-            onChange={(e) =>
-              setSelected((prev) => ({
-                ...prev,
-                [question.id]: Number(e.target.value),
-              }))
-            }
+            value={selected[currentQuestion.id] ?? ''}
+            onChange={(e) => handleAnswer(Number(e.target.value))}
           >
-            {question.answers.map((answer: any) => (
-              <FormControlLabel
+            {currentQuestion.answers.map((answer: any) => (
+              <Paper
                 key={answer.id}
-                value={answer.id}
-                disabled={isTimeUp}
-                control={<Radio />}
-                label={answer.answer_text}
-              />
-            ))}
-            {isTimeUp && (
-              <Typography color="success.main" mt={1}>
-                ✅ Đáp án đúng:{' '}
-                {question.answers.find((a: any) => a.is_correct)?.answer_text}
-              </Typography>
-            )}
-          </RadioGroup>
-          {selected[question.id] && (
-            <>
-              {question.answers.find((a: any) => a.id === selected[question.id])
-                ?.is_correct ? (
-                <Typography color="success.main" fontWeight={700}>
-                  ✅ Chính xác!
-                </Typography>
-              ) : (
-                <Typography color="error.main" fontWeight={700}>
-                  ❌ Sai rồi!
-                </Typography>
-              )}
-            </>
-          )}
-        </Box>
-      ))}
+                variant="outlined"
+                sx={{
+                  mb: 2,
+                  borderRadius: 2,
+                  transition: '0.2s',
 
-      <Button variant="contained" onClick={() => console.log(selected)}>
-        Submit
-      </Button>
-    </Box>
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                    bgcolor: 'action.hover',
+                  },
+                }}
+              >
+                <FormControlLabel
+                  value={answer.id}
+                  disabled={isTimeUp || isLocked}
+                  control={<Radio />}
+                  label={answer.answer_text}
+                  sx={{
+                    width: '100%',
+                    px: 2,
+                    py: 1,
+                    m: 0,
+                  }}
+                />
+              </Paper>
+            ))}
+          </RadioGroup>
+        </Paper>
+
+        {/* Footer */}
+        <Stack direction="row" justifyContent="space-between" mt={4}>
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={handlePrevQuestion}
+            disabled={currentQuestionIndex === 0 || isLocked}
+          >
+            ← Câu trước
+          </Button>
+
+          {currentQuestionIndex === quiz.questions.length - 1 ? (
+            <Button
+              variant="contained"
+              color="success"
+              size="large"
+              onClick={() => setOpenSubmitDialog(true)}
+            >
+              🚀 Nộp bài
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              size="large"
+              onClick={handleNextQuestion}
+              disabled={isLocked}
+            >
+              Câu tiếp →
+            </Button>
+          )}
+        </Stack>
+      </Box>
+
+      <ModalFinishTest
+        open={openSubmitDialog}
+        canSubmit={canSubmit}
+        unansweredQuestions={unansweredQuestions}
+        questions={quiz.questions}
+        onClose={() => setOpenSubmitDialog(false)}
+        onSubmit={handleSubmitQuiz}
+      />
+    </>
   );
 }

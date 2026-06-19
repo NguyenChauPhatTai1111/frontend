@@ -4,18 +4,11 @@ import QuizList from './QuizList';
 import QuizPlay from './QuizPlay';
 
 export default function QuizGamePage() {
-  const [quizId, setQuizId] =
-    useState<number>();
+  const [quizId, setQuizId] = useState<number>();
 
   if (quizId) {
-    return (
-      <QuizPlay quizId={quizId} />
-    );
+    return <QuizPlay quizId={quizId} onBack={() => setQuizId(undefined)} />;
   }
 
-  return (
-    <QuizList
-      onSelect={setQuizId}
-    />
-  );
+  return <QuizList onSelect={setQuizId} />;
 }
