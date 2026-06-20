@@ -15,7 +15,7 @@ export const getQuizDetail = async (id: number) => {
 };
 
 export const submitQuiz = async (quizId: number, answers: any[]) => {
-  const token = localStorage.getItem('MXwyMDI2LTA2LTE5IDA5OjUwOjU5');
+  const token = localStorage.getItem('access_token');
 
   const res = await axios.post(
     `${API_URL}/quizzes/${quizId}/submit`,

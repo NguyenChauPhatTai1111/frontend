@@ -17,9 +17,9 @@ export const authProvider: AuthProvider = {
         }),
       });
 
-      const data = await response.json();
+      const data = await response.json(); 
 
-      if (!response.ok || !data.success) {
+      if (!response.ok || data.status != 'success') {
         return {
           success: false,
           error: {
