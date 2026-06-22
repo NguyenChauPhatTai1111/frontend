@@ -11,6 +11,7 @@ interface Props {
   onRetry: () => void;
   onReview: () => void;
   onBack: () => void;
+  onHistory: () => void;
 }
 
 export default function QuizResult({
@@ -24,6 +25,7 @@ export default function QuizResult({
   onRetry,
   onReview,
   onBack,
+  onHistory,
 }: Props) {
   return (
     <Box textAlign="center">
@@ -64,6 +66,10 @@ export default function QuizResult({
 
         <Button variant="outlined" onClick={onBack}>
           ← Về danh sách bài thi
+        </Button>
+
+        <Button variant="outlined" onClick={onHistory}>
+          Xem lịch sử làm bài
         </Button>
       </Box>
     </Box>

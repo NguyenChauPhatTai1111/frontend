@@ -19,9 +19,10 @@ import QuizResult from './finished';
 interface Props {
   quizId: number;
   onBack: () => void;
+  onHistory: () => void;
 }
 
-export default function QuizPlay({ quizId, onBack }: Props) {
+export default function QuizPlay({ quizId, onBack, onHistory }: Props) {
   const [quiz, setQuiz] = useState<any>(null);
   const TOTAL_TIME = 10 * 1; // 10 phút
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
@@ -175,6 +176,7 @@ export default function QuizPlay({ quizId, onBack }: Props) {
         onRetry={handleRetry}
         onReview={() => setReviewMode(true)}
         onBack={onBack}
+        onHistory={onHistory}
       />
     );
   }

@@ -29,3 +29,9 @@ export const submitQuiz = async (quizId: number, answers: any[]) => {
 
   return res.data;
 };
+
+export const getQuizHistory = async () => {
+  const response = await axios.get('http://localhost:8000/api/quiz_attempts');
+
+  return response.data;
+};
