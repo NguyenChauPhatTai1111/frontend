@@ -10,13 +10,34 @@ import {
 
 import { useEffect, useState } from 'react';
 
-import { getQuizHistory } from '@/hooks/quiz.service';
+import { getQuizHistory, getQuizMarks } from '@/hooks/quiz.service';
 
 export default function QuizHistory() {
   const [history, setHistory] = useState<any[]>([]);
-
+  const [marks, setMarks] = useState<Record<number, any[]>>({});
   useEffect(() => {
-    getQuizHistory().then(setHistory);
+    const loadData = async () => {
+      const attempts = await getQuizHistory();
+
+      setHistory(attempts);
+
+      const markData: Record<number, any[]> = {};
+
+      await Promise.all(
+        attempts.map(async (attempt: any) => {
+          try {
+            const marks = await getQuizMarks(attempt.quiz_id);
+            markData[attempt.quiz_id] = marks;
+          } catch {
+            markData[attempt.quiz_id] = [];
+          }
+        }),
+      );
+
+      setMarks(markData);
+    };
+
+    loadData();
   }, []);
 
   return (
@@ -51,6 +72,31 @@ export default function QuizHistory() {
                 <Typography color="text.secondary" mt={2}>
                   {new Date(attempt.created_at).toLocaleString()}
                 </Typography>
+
+                {/* Câu hỏi đặc biệt */}
+                <Box mt={2}>
+                  <Typography variant="subtitle2" gutterBottom fontWeight={600}>
+                    Câu hỏi đặc biệt:
+                  </Typography>
+
+                  {marks[attempt.quiz_id]?.length > 0 ? (
+                    <Box display="flex" flexWrap="wrap" gap={1}>
+                      {marks[attempt.quiz_id].map((questionId: number) => (
+                        <Chip
+                          key={questionId}
+                          label={`Câu hỏi #${questionId}`}
+                          color="warning"
+                          variant="outlined"
+                          size="small"
+                        />
+                      ))}
+                    </Box>
+                  ) : (
+                    <Typography variant="body2" color="text.secondary">
+                      Không có câu hỏi đặc biệt
+                    </Typography>
+                  )}
+                </Box>
               </CardContent>
             </Card>
           </Grid>

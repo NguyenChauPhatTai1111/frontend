@@ -35,3 +35,49 @@ export const getQuizHistory = async () => {
 
   return response.data;
 };
+
+export const toggleQuizMark = async (quizId: number, questionId: number) => {
+  const token = localStorage.getItem('access_token');
+
+  const { data } = await axios.post(
+    `${API_URL}/quiz/${quizId}/questions/${questionId}/mark`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return data;
+};
+
+export const getQuizMarks = async (quizId: number) => {
+  const token = localStorage.getItem('access_token');
+
+  const { data } = await axios.get(`${API_URL}/quiz/${quizId}/marks`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return data;
+};
+
+export const askAIForQuestion = async (questionId: number) => {
+  const token = localStorage.getItem('access_token');
+
+  const { data } = await axios.post(
+    `${API_URL}/quiz/ai-help`,
+    {
+      question_id: questionId,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return data;
+};

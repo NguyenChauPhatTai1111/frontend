@@ -10,12 +10,17 @@ import {
   LinearProgress,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-
-import { getQuizDetail, submitQuiz } from '@/hooks/quiz.service';
+import {
+  getQuizDetail,
+  submitQuiz,
+  getQuizMarks,
+  toggleQuizMark,
+} from '@/hooks/quiz.service';
 import ModalFinishTest from './modalFinishText';
 import QuizReview from './QuizReview';
 import QuizResult from './finished';
-
+import { Snackbar, Alert } from '@mui/material';
+import QuizAiHelper from './QuizAI';
 interface Props {
   quizId: number;
   onBack: () => void;
@@ -34,12 +39,35 @@ export default function QuizPlay({ quizId, onBack }: Props) {
   const [finished, setFinished] = useState(false);
   const [result, setResult] = useState<any>(null);
   const isLocked = timeLeft <= 0;
+  const [marked, setMarked] = useState<Record<number, boolean>>({});
+  const [aiUsed, setAiUsed] = useState(false);
+
+  const [noti, setNoti] = useState({
+    open: false,
+    message: '',
+    severity: 'success' as 'success' | 'info' | 'warning' | 'error',
+  });
   useEffect(() => {
-    getQuizDetail(quizId).then(setQuiz);
+    if (!quizId) return;
+
+    const loadData = async () => {
+      const quizData = await getQuizDetail(quizId);
+      setQuiz(quizData);
+
+      const marks = await getQuizMarks(quizId);
+
+      const map: Record<number, boolean> = {};
+      marks.forEach((id: number) => {
+        map[id] = true;
+      });
+
+      setMarked(map);
+    };
+
+    loadData();
   }, [quizId]);
   const currentQuestion = quiz?.questions?.[currentQuestionIndex];
-
-  // const nextQuestion = () => {
+  // const nexif (!quiz || !currentQuestion) return null;tQuestion = () => {
   //   if (!quiz) return;
 
   //   if (currentQuestionIndex < quiz.questions.length - 1) {
@@ -52,16 +80,12 @@ export default function QuizPlay({ quizId, onBack }: Props) {
   // };
 
   const handleAnswer = (answerId: number) => {
-    if (finished) return;
+    if (finished || !currentQuestion) return;
 
     setSelected((prev) => ({
       ...prev,
       [currentQuestion.id]: answerId,
     }));
-
-    // setTimeout(() => {
-    //   nextQuestion();
-    // }, 1500);
   };
 
   const handleRetry = () => {
@@ -117,16 +141,12 @@ export default function QuizPlay({ quizId, onBack }: Props) {
     if (currentQuestionIndex === 0) return;
 
     setCurrentQuestionIndex((prev) => prev - 1);
-    // setTimeLeft(15);
-    // setIsTimeUp(false);
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex >= quiz.questions.length - 1) return;
 
     setCurrentQuestionIndex((prev) => prev + 1);
-    // setTimeLeft(15);
-    // setIsTimeUp(false);
   };
 
   const handleSubmitQuiz = async () => {
@@ -152,6 +172,20 @@ export default function QuizPlay({ quizId, onBack }: Props) {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleToggleMark = async (questionId: number) => {
+    const res = await toggleQuizMark(quizId, questionId);
+
+    setMarked((prev) => ({
+      ...prev,
+      [questionId]: res.marked,
+    }));
+    setNoti({
+      open: true,
+      message: res.message,
+      severity: res.marked ? 'success' : 'info',
+    });
   };
 
   if (reviewMode) {
@@ -265,42 +299,81 @@ export default function QuizPlay({ quizId, onBack }: Props) {
           }}
         >
           <Typography variant="h5" fontWeight={700} mb={3}>
-            {currentQuestion.question}
+            <Box sx={{ display: 'flex', gap: 5 }}>
+              {currentQuestion.question}
+              <Button
+                size="small"
+                variant={
+                  marked?.[currentQuestion.id] ? 'contained' : 'outlined'
+                }
+                color={marked?.[currentQuestion.id] ? 'error' : 'inherit'}
+                disabled
+              >
+                🤖 AI:{' '}
+                {marked?.[currentQuestion.id] ? 'Hard question' : 'Normal'}
+              </Button>
+            </Box>
           </Typography>
-
+          <QuizAiHelper
+            quizId={quizId}
+            currentQuestion={currentQuestion}
+            aiUsed={aiUsed}
+            setAiUsed={setAiUsed}
+            setSelected={setSelected}
+          />
           <RadioGroup
             value={selected[currentQuestion.id] ?? ''}
             onChange={(e) => handleAnswer(Number(e.target.value))}
           >
-            {currentQuestion.answers.map((answer: any) => (
+            {currentQuestion.answers?.length > 0 ? (
+              currentQuestion.answers.map((answer: any) => (
+                <Paper
+                  key={answer.id}
+                  variant="outlined"
+                  sx={{
+                    mb: 2,
+                    borderRadius: 2,
+                    borderWidth: 2,
+                    borderColor:
+                      selected[currentQuestion.id] === answer.id
+                        ? 'success.main'
+                        : 'divider',
+                    transition: '0.2s',
+                    '&:hover': {
+                      borderColor: 'primary.main',
+                      bgcolor: 'action.hover',
+                    },
+                  }}
+                >
+                  <FormControlLabel
+                    value={answer.id}
+                    disabled={isTimeUp || isLocked}
+                    control={<Radio />}
+                    label={answer.answer_text}
+                    sx={{
+                      width: '100%',
+                      px: 2,
+                      py: 1,
+                      m: 0,
+                    }}
+                  />
+                </Paper>
+              ))
+            ) : (
               <Paper
-                key={answer.id}
                 variant="outlined"
                 sx={{
-                  mb: 2,
+                  p: 3,
+                  textAlign: 'center',
                   borderRadius: 2,
-                  transition: '0.2s',
-
-                  '&:hover': {
-                    borderColor: 'primary.main',
-                    bgcolor: 'action.hover',
-                  },
+                  bgcolor: 'grey.150',
                 }}
               >
-                <FormControlLabel
-                  value={answer.id}
-                  disabled={isTimeUp || isLocked}
-                  control={<Radio />}
-                  label={answer.answer_text}
-                  sx={{
-                    width: '100%',
-                    px: 2,
-                    py: 1,
-                    m: 0,
-                  }}
-                />
+                <Typography color="text.secondary">
+                  🚧 Câu hỏi này đang được phát triển, vui lòng quay lại sau.
+                </Typography>
               </Paper>
-            ))}
+            )}
           </RadioGroup>
         </Paper>
 
@@ -336,6 +409,20 @@ export default function QuizPlay({ quizId, onBack }: Props) {
           )}
         </Stack>
       </Box>
+      <Snackbar
+        open={noti.open}
+        autoHideDuration={3000}
+        onClose={() => setNoti((p) => ({ ...p, open: false }))}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setNoti((p) => ({ ...p, open: false }))}
+          severity={noti.severity}
+          variant="filled"
+        >
+          {noti.message}
+        </Alert>
+      </Snackbar>
 
       <ModalFinishTest
         open={openSubmitDialog}
