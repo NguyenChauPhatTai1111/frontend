@@ -22,9 +22,9 @@ interface Props {
   onHistory: () => void;
 }
 
-export default function QuizPlay({ quizId, onBack, onHistory }: Props) {
+export default function QuizPlay({ quizId, onBack }: Props) {
   const [quiz, setQuiz] = useState<any>(null);
-  const TOTAL_TIME = 10 * 1; // 10 phút
+  const TOTAL_TIME = 10 * 60; // 10 phút
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
   const [isTimeUp, setIsTimeUp] = useState(false);
   const [reviewMode, setReviewMode] = useState(false);
@@ -67,7 +67,7 @@ export default function QuizPlay({ quizId, onBack, onHistory }: Props) {
   const handleRetry = () => {
     setFinished(false);
     setCurrentQuestionIndex(0);
-    setTimeLeft(15);
+    setTimeLeft(TOTAL_TIME);
     setIsTimeUp(false);
     setSelected({});
   };
@@ -117,16 +117,16 @@ export default function QuizPlay({ quizId, onBack, onHistory }: Props) {
     if (currentQuestionIndex === 0) return;
 
     setCurrentQuestionIndex((prev) => prev - 1);
-    setTimeLeft(15);
-    setIsTimeUp(false);
+    // setTimeLeft(15);
+    // setIsTimeUp(false);
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex >= quiz.questions.length - 1) return;
 
     setCurrentQuestionIndex((prev) => prev + 1);
-    setTimeLeft(15);
-    setIsTimeUp(false);
+    // setTimeLeft(15);
+    // setIsTimeUp(false);
   };
 
   const handleSubmitQuiz = async () => {
@@ -176,7 +176,6 @@ export default function QuizPlay({ quizId, onBack, onHistory }: Props) {
         onRetry={handleRetry}
         onReview={() => setReviewMode(true)}
         onBack={onBack}
-        onHistory={onHistory}
       />
     );
   }

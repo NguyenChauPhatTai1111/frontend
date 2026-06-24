@@ -12,11 +12,7 @@ import { useEffect, useState } from 'react';
 
 import { getQuizHistory } from '@/hooks/quiz.service';
 
-interface Props {
-  onBack: () => void;
-}
-
-export default function QuizHistory({ onBack }: Props) {
+export default function QuizHistory() {
   const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {
@@ -28,9 +24,7 @@ export default function QuizHistory({ onBack }: Props) {
       <Box display="flex" justifyContent="space-between" mb={4}>
         <Typography variant="h4">Lịch sử làm bài</Typography>
 
-        <Button variant="outlined" onClick={onBack}>
-          Quay lại
-        </Button>
+        <Button variant="outlined">Quay lại</Button>
       </Box>
 
       <Grid container spacing={3}>

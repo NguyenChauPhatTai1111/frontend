@@ -53,6 +53,9 @@ import { MoviesList } from './pages/movie/list';
 import MovieIcon from '@mui/icons-material/Movie';
 import { MovieDetail } from './pages/movie/MovieDetail';
 import QuizGamePage from './pages/quizGame';
+import QuizHistory from './pages/quizGame/QuizHistory';
+import QuizIcon from '@mui/icons-material/Quiz';
+import HistoryIcon from '@mui/icons-material/History';
 function App() {
   return (
     <BrowserRouter>
@@ -146,8 +149,30 @@ function App() {
                       },
                     },
                     {
-                      name: 'Quiz Game',
+                      name: 'quiz-game',
                       list: '/quiz-game',
+                      meta: {
+                        label: 'Quiz',
+                        icon: <QuizIcon />,
+                      },
+                    },
+                    {
+                      name: 'quiz-game',
+                      list: '/quiz-game',
+                      meta: {
+                        label: 'Quiz Game',
+                        parent: 'quiz-game',
+                        icon: <QuizIcon />,
+                      },
+                    },
+                    {
+                      name: 'quiz-history',
+                      list: '/quiz-game/history',
+                      meta: {
+                        label: 'Quiz History',
+                        parent: 'quiz-game',
+                        icon: <HistoryIcon />,
+                      },
                     },
                   ]}
                   options={{
@@ -229,6 +254,15 @@ function App() {
                           element={
                             <GameGuard>
                               <QuizGamePage />
+                            </GameGuard>
+                          }
+                        />
+
+                        <Route
+                          path="history"
+                          element={
+                            <GameGuard>
+                              <QuizHistory />
                             </GameGuard>
                           }
                         />

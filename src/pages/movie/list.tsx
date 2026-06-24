@@ -20,7 +20,6 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import SearchMovie from './searchMovies';
 import CategoryMovie from './categoryMovies';
-import ReactPlayer from 'react-player';
 
 export const IMAGE_THUMB_URL = 'https://img.ophim.live/uploads/movies/';
 

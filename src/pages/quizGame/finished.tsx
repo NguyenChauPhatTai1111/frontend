@@ -1,5 +1,5 @@
 import { Box, Typography, Button } from '@mui/material';
-
+import { useNavigate } from 'react-router-dom';
 interface Props {
   score: number;
   percentage: number;
@@ -11,7 +11,6 @@ interface Props {
   onRetry: () => void;
   onReview: () => void;
   onBack: () => void;
-  onHistory: () => void;
 }
 
 export default function QuizResult({
@@ -25,8 +24,9 @@ export default function QuizResult({
   onRetry,
   onReview,
   onBack,
-  onHistory,
 }: Props) {
+  const navigate = useNavigate();
+
   return (
     <Box textAlign="center">
       <Typography variant="h4" gutterBottom>
@@ -68,7 +68,10 @@ export default function QuizResult({
           ← Về danh sách bài thi
         </Button>
 
-        <Button variant="outlined" onClick={onHistory}>
+        <Button
+          variant="outlined"
+          onClick={() => navigate('/quiz-game/history')}
+        >
           Xem lịch sử làm bài
         </Button>
       </Box>
