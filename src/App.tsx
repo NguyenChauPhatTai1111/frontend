@@ -56,6 +56,8 @@ import QuizGamePage from './pages/quizGame';
 import QuizHistory from './pages/quizGame/QuizHistory';
 import QuizIcon from '@mui/icons-material/Quiz';
 import HistoryIcon from '@mui/icons-material/History';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import GameAI from './gameAICam';
 function App() {
   return (
     <BrowserRouter>
@@ -146,6 +148,13 @@ function App() {
                       meta: {
                         icon: <MovieIcon />,
                         canDelete: true,
+                      },
+                    },
+                    {
+                      name: 'game-ai',
+                      list: '/game-ai',
+                      meta: {
+                        icon: <SportsEsportsIcon />,
                       },
                     },
                     {
@@ -247,7 +256,7 @@ function App() {
                           }
                         />
                       </Route>
-
+                      <Route path="/game-ai" element={<GameAI />} />
                       <Route path="/quiz-game">
                         <Route
                           index

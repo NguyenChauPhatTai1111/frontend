@@ -21,6 +21,7 @@ import QuizReview from './QuizReview';
 import QuizResult from './finished';
 import { Snackbar, Alert } from '@mui/material';
 import QuizAiHelper from './QuizAI';
+import useVoiceAnswer from '@/hooks/useVoiceAnswer';
 interface Props {
   quizId: number;
   onBack: () => void;
@@ -41,7 +42,7 @@ export default function QuizPlay({ quizId, onBack }: Props) {
   const isLocked = timeLeft <= 0;
   const [marked, setMarked] = useState<Record<number, boolean>>({});
   const [aiUsed, setAiUsed] = useState(false);
-
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [noti, setNoti] = useState({
     open: false,
     message: '',
@@ -87,7 +88,7 @@ export default function QuizPlay({ quizId, onBack }: Props) {
       [currentQuestion.id]: answerId,
     }));
   };
-
+  useVoiceAnswer(voiceEnabled ? currentQuestion : null, handleAnswer);
   const handleRetry = () => {
     setFinished(false);
     setCurrentQuestionIndex(0);
@@ -314,6 +315,12 @@ export default function QuizPlay({ quizId, onBack }: Props) {
               </Button>
             </Box>
           </Typography>
+          <Button
+            variant={voiceEnabled ? 'contained' : 'outlined'}
+            onClick={() => setVoiceEnabled(!voiceEnabled)}
+          >
+            🎤 Voice Mode
+          </Button>
           <QuizAiHelper
             quizId={quizId}
             currentQuestion={currentQuestion}
@@ -326,7 +333,7 @@ export default function QuizPlay({ quizId, onBack }: Props) {
             onChange={(e) => handleAnswer(Number(e.target.value))}
           >
             {currentQuestion.answers?.length > 0 ? (
-              currentQuestion.answers.map((answer: any) => (
+              currentQuestion.answers.map((answer: any, index: number) => (
                 <Paper
                   key={answer.id}
                   variant="outlined"
@@ -349,7 +356,9 @@ export default function QuizPlay({ quizId, onBack }: Props) {
                     value={answer.id}
                     disabled={isTimeUp || isLocked}
                     control={<Radio />}
-                    label={answer.answer_text}
+                    label={`${String.fromCharCode(
+                      65 + index,
+                    )}. ${answer.answer_text}`}
                     sx={{
                       width: '100%',
                       px: 2,
