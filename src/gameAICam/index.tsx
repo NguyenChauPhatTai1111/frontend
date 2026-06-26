@@ -380,18 +380,18 @@ export default function GameAI() {
     init();
   }, []);
 
-  async function startCamera() {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-    });
+  // async function startCamera() {
+  //   const stream = await navigator.mediaDevices.getUserMedia({
+  //     video: true,
+  //   });
 
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream;
-      await videoRef.current.play();
-    }
+  //   if (videoRef.current) {
+  //     videoRef.current.srcObject = stream;
+  //     await videoRef.current.play();
+  //   }
 
-    setUseCamera(true);
-  }
+  //   setUseCamera(true);
+  // }
 
   function stopCamera() {
     const stream = videoRef.current?.srcObject as MediaStream | null;
