@@ -67,7 +67,6 @@ export default function QuizAiHelper({
       setRobotMessage('🧠 Đang suy luận đáp án...');
       await delay(1800);
 
-      // 👉 gọi song song AI + mark
       const [aiData] = await Promise.all([
         askAIForQuestion(currentQuestion.id),
         handleToggleMark(currentQuestion.id),
@@ -79,11 +78,15 @@ export default function QuizAiHelper({
       }));
 
       setRobotMessage(
-        `🎉 Đã tìm thấy đáp án
-
-Đáp án: ${aiData.answer}
-
-${aiData.suggestion}`,
+        [
+          '🎉 Đã tìm thấy đáp án',
+          '',
+          aiData.answer ? `Đáp án: ${aiData.answer}` : null,
+          '',
+          aiData.suggestion,
+        ]
+          .filter(Boolean)
+          .join('\n'),
       );
 
       setAiUsed(true);
@@ -99,7 +102,6 @@ ${aiData.suggestion}`,
     }
   };
 
-  // ✅ CHỈ reset khi đổi câu hỏi
   useEffect(() => {
     setRobotMode('idle');
     if (aiUsed) {

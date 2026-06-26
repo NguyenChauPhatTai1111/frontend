@@ -12,6 +12,15 @@ export default function GameAI() {
   const hitEffectRef = useRef(0);
   const gameOverFrameRef = useRef(0);
   const bulletLevelRef = useRef(1);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const playerImage = useRef(new Image());
+
+  useEffect(() => {
+    playerImage.current.crossOrigin = 'anonymous';
+    playerImage.current.src =
+      'img/U6-vggECenb8ih6BErbozlJdmuRxXueO0XpBbKGhV4j15Fw1OrE459h__OTGqBFfSsPl9ZmIUeRjxXIveNSu4X_0XGnMu-Q2ubisOLoTCkVJRqcVAJbyjmZzwR43Qtom89vnNd8xnv0K14nLye2C5-yD0UDw1Z32txCHzzLjpZBW8O9DNi07ySw18YfNs2Er.jpg';
+  }, []);
+
   const bonusesRef = useRef<
     {
       x: number;
@@ -43,6 +52,8 @@ export default function GameAI() {
 
   useEffect(() => {
     const bonusInterval = setInterval(() => {
+      if (!isPlaying) return;
+
       bonusesRef.current.push({
         x: Math.random() * 740,
         y: -50,
@@ -51,10 +62,11 @@ export default function GameAI() {
     }, 8000);
 
     return () => clearInterval(bonusInterval);
-  }, []);
+  }, [isPlaying]);
 
   useEffect(() => {
     const bulletInterval = window.setInterval(() => {
+      if (!isPlaying) return;
       const level = bulletLevelRef.current;
 
       for (let i = 0; i < level; i++) {
@@ -66,7 +78,7 @@ export default function GameAI() {
     }, 250);
 
     return () => clearInterval(bulletInterval);
-  }, []);
+  }, [isPlaying]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -98,6 +110,7 @@ export default function GameAI() {
 
   useEffect(() => {
     const enemyInterval = window.setInterval(() => {
+      if (!isPlaying) return;
       for (let i = 0; i < 5; i++) {
         enemiesRef.current.push({
           x: Math.random() * 740,
@@ -109,7 +122,7 @@ export default function GameAI() {
     }, 600);
 
     return () => clearInterval(enemyInterval);
-  }, []);
+  }, [isPlaying]);
 
   async function initHandTracking() {
     const vision = await FilesetResolver.forVisionTasks(
@@ -346,17 +359,13 @@ export default function GameAI() {
 
     ctx.fillStyle = 'cyan';
 
-    ctx.beginPath();
-
-    ctx.moveTo(playerRef.current.x, playerRef.current.y);
-
-    ctx.lineTo(playerRef.current.x - 30, playerRef.current.y + 40);
-
-    ctx.lineTo(playerRef.current.x + 30, playerRef.current.y + 40);
-
-    ctx.closePath();
-
-    ctx.fill();
+    ctx.drawImage(
+      playerImage.current,
+      playerRef.current.x - 32,
+      playerRef.current.y - 32,
+      64,
+      64,
+    );
     ctx.restore();
     requestAnimationFrame(gameLoop);
   }
@@ -431,7 +440,19 @@ export default function GameAI() {
       >
         {useCamera ? 'Tắt Camera - Dùng Bàn Phím' : 'Bật Camera - Dùng Tay'}
       </button>
-
+      {!isPlaying && (
+        <button
+          onClick={() => setIsPlaying(true)}
+          style={{
+            marginBottom: 20,
+            padding: '12px 30px',
+            fontSize: 20,
+            cursor: 'pointer',
+          }}
+        >
+          🚀 Bắt đầu chơi
+        </button>
+      )}
       <canvas
         ref={canvasRef}
         width={800}

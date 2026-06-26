@@ -21,7 +21,7 @@ import QuizReview from './QuizReview';
 import QuizResult from './finished';
 import { Snackbar, Alert } from '@mui/material';
 import QuizAiHelper from './QuizAI';
-import useVoiceAnswer from '@/hooks/useVoiceAnswer';
+// import useVoiceAnswer from '@/hooks/useVoiceAnswer';
 interface Props {
   quizId: number;
   onBack: () => void;
@@ -88,7 +88,7 @@ export default function QuizPlay({ quizId, onBack }: Props) {
       [currentQuestion.id]: answerId,
     }));
   };
-  useVoiceAnswer(voiceEnabled ? currentQuestion : null, handleAnswer);
+  // useVoiceAnswer(voiceEnabled ? currentQuestion : null, handleAnswer);
   const handleRetry = () => {
     setFinished(false);
     setCurrentQuestionIndex(0);
@@ -175,19 +175,19 @@ export default function QuizPlay({ quizId, onBack }: Props) {
     }
   };
 
-  const handleToggleMark = async (questionId: number) => {
-    const res = await toggleQuizMark(quizId, questionId);
+  // const handleToggleMark = async (questionId: number) => {
+  //   const res = await toggleQuizMark(quizId, questionId);
 
-    setMarked((prev) => ({
-      ...prev,
-      [questionId]: res.marked,
-    }));
-    setNoti({
-      open: true,
-      message: res.message,
-      severity: res.marked ? 'success' : 'info',
-    });
-  };
+  //   setMarked((prev) => ({
+  //     ...prev,
+  //     [questionId]: res.marked,
+  //   }));
+  //   setNoti({
+  //     open: true,
+  //     message: res.message,
+  //     severity: res.marked ? 'success' : 'info',
+  //   });
+  // };
 
   if (reviewMode) {
     return (
@@ -315,12 +315,12 @@ export default function QuizPlay({ quizId, onBack }: Props) {
               </Button>
             </Box>
           </Typography>
-          <Button
+          {/* <Button
             variant={voiceEnabled ? 'contained' : 'outlined'}
             onClick={() => setVoiceEnabled(!voiceEnabled)}
           >
             🎤 Voice Mode
-          </Button>
+          </Button> */}
           <QuizAiHelper
             quizId={quizId}
             currentQuestion={currentQuestion}

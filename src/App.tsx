@@ -15,7 +15,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import ChatIcon from '@mui/icons-material/Chat';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import ProductIcon from '@mui/icons-material/ProductionQuantityLimits';
+// import ProductIcon from '@mui/icons-material/ProductionQuantityLimits';
 import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import routerProvider, {
@@ -26,12 +26,12 @@ import routerProvider, {
 } from '@refinedev/react-router';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router';
 import { ColorModeContextProvider } from './contexts/color-mode';
-import {
-  BlogPostCreate,
-  BlogPostEdit,
-  BlogPostList,
-  BlogPostShow,
-} from './pages/blog-posts';
+// import {
+//   BlogPostCreate,
+//   BlogPostEdit,
+//   BlogPostList,
+//   BlogPostShow,
+// } from './pages/blog-posts';
 import {
   CategoryCreate,
   CategoryEdit,
@@ -44,8 +44,8 @@ import { Login } from './pages/login';
 import { Register } from './pages/register';
 import { authProvider } from './providers/auth';
 import { dataProvider } from './providers/data';
-import { ProductList } from './pages/products/list';
-import { ProductDetail } from './pages/products/ProductDetail';
+// import { ProductList } from './pages/products/list';
+// import { ProductDetail } from './pages/products/ProductDetail';
 import { MusicGenreList } from './pages/Music/list';
 import { MusicGenreDetail } from './pages/Music/MusicGenreDetail';
 import { MyMusic } from './pages/Music/MyMusic';
@@ -89,12 +89,12 @@ function App() {
                         icon: <MusicNoteIcon />,
                       },
                     },
-                    {
-                      name: 'youtube-jobs',
-                      list: '/youtube-jobs',
-                      create: '/youtube-jobs/create',
-                      edit: '/youtube-jobs/edit/:id',
-                    },
+                    // {
+                    //   name: 'youtube-jobs',
+                    //   list: '/youtube-jobs',
+                    //   create: '/youtube-jobs/create',
+                    //   edit: '/youtube-jobs/edit/:id',
+                    // },
                     {
                       name: 'my-music',
                       list: '/my-music',
@@ -110,27 +110,27 @@ function App() {
                         icon: <ChatIcon />,
                       },
                     },
-                    {
-                      name: 'products',
-                      list: '/products',
-                      create: '/products/create',
-                      edit: '/products/edit/:id',
-                      show: '/products/show/:id',
-                      meta: {
-                        icon: <ProductIcon />,
-                      },
-                    },
-                    {
-                      name: 'blog_posts',
-                      list: '/blog-posts',
-                      create: '/blog-posts/create',
-                      edit: '/blog-posts/edit/:id',
-                      show: '/blog-posts/show/:id',
-                      meta: {
-                        icon: <ProductIcon />,
-                        canDelete: true,
-                      },
-                    },
+                    // {
+                    //   name: 'products',
+                    //   list: '/products',
+                    //   create: '/products/create',
+                    //   edit: '/products/edit/:id',
+                    //   show: '/products/show/:id',
+                    //   meta: {
+                    //     icon: <ProductIcon />,
+                    //   },
+                    // },
+                    // {
+                    //   name: 'blog_posts',
+                    //   list: '/blog-posts',
+                    //   create: '/blog-posts/create',
+                    //   edit: '/blog-posts/edit/:id',
+                    //   show: '/blog-posts/show/:id',
+                    //   meta: {
+                    //     icon: <ProductIcon />,
+                    //     canDelete: true,
+                    //   },
+                    // },
                     {
                       name: 'categories',
                       list: '/categories',
@@ -237,7 +237,7 @@ function App() {
                           }
                         />
                       </Route>
-                      <Route path="/products">
+                      {/* <Route path="/products">
                         <Route
                           index
                           element={
@@ -255,7 +255,7 @@ function App() {
                             </GameGuard>
                           }
                         />
-                      </Route>
+                      </Route> */}
                       <Route path="/game-ai" element={<GameAI />} />
                       <Route path="/quiz-game">
                         <Route
@@ -286,12 +286,12 @@ function App() {
                         <Route index element={<MyMusic />} />
                       </Route>
 
-                      <Route path="/blog-posts">
+                      {/* <Route path="/blog-posts">
                         <Route index element={<BlogPostList />} />
                         <Route path="create" element={<BlogPostCreate />} />
                         <Route path="edit/:id" element={<BlogPostEdit />} />
                         <Route path="show/:id" element={<BlogPostShow />} />
-                      </Route>
+                      </Route> */}
 
                       <Route path="/categories">
                         <Route index element={<UserList />} />
