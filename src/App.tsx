@@ -55,9 +55,11 @@ import { MovieDetail } from './pages/movie/MovieDetail';
 import QuizGamePage from './pages/quizGame';
 import QuizHistory from './pages/quizGame/QuizHistory';
 import QuizIcon from '@mui/icons-material/Quiz';
+import MessageIcon from '@mui/icons-material/Message';
 import HistoryIcon from '@mui/icons-material/History';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import GameAI from './gameAICam';
+import Messenger from './pages/messenger/Messager';
 function App() {
   return (
     <BrowserRouter>
@@ -147,6 +149,14 @@ function App() {
                       show: '/movies/:slug',
                       meta: {
                         icon: <MovieIcon />,
+                        canDelete: true,
+                      },
+                    },
+                    {
+                      name: 'Messenger',
+                      list: '/messenger',
+                      meta: {
+                        icon: <MessageIcon />,
                         canDelete: true,
                       },
                     },
@@ -307,7 +317,9 @@ function App() {
 
                       <Route path="*" element={<ErrorComponent />} />
                     </Route>
-
+                    <Route path="/messenger">
+                      <Route index element={<Messenger />} />
+                    </Route>
                     {/* Login */}
                     <Route
                       element={
