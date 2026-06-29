@@ -52,12 +52,7 @@
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.5"
   },
-  // "scripts": {
-  //   "dev": "refine dev",
-  //   "build": "tsc && refine build",
-  //   "start": "refine start",
-  //   "refine": "refine"
-  // },
+ 
   "scripts": {
     "dev": "vite",
     "build": "vite build"
