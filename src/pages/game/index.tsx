@@ -107,39 +107,83 @@ export const GamePage = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        bgcolor: '#f5f5f5',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        p: 2,
+        py: 6,
+        px: 2,
+        background:
+          'radial-gradient(circle at top left, rgba(59,130,246,0.28), transparent 24%), radial-gradient(circle at bottom right, rgba(168,85,247,0.22), transparent 32%), linear-gradient(180deg, #020617 0%, #111827 100%)',
       }}
     >
       <Paper
-        elevation={4}
+        elevation={12}
         sx={{
-          p: 4,
+          position: 'relative',
+          overflow: 'hidden',
+          p: { xs: 4, md: 6 },
           width: '100%',
-          maxWidth: 700,
-          borderRadius: 3,
+          maxWidth: 760,
+          borderRadius: 5,
+          bgcolor: 'rgba(8, 15, 33, 0.92)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          boxShadow: '0 34px 90px rgba(0, 0, 0, 0.35)',
+          backdropFilter: 'blur(16px)',
+          color: 'common.white',
         }}
       >
-        <Typography variant="h4" textAlign="center" gutterBottom>
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'radial-gradient(circle at 20% 20%, rgba(59,130,246,0.18), transparent 18%), radial-gradient(circle at 85% 10%, rgba(168,85,247,0.14), transparent 18%)',
+            pointerEvents: 'none',
+          }}
+        />
+
+        <Typography
+          variant="h3"
+          textAlign="center"
+          gutterBottom
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            fontWeight: 800,
+            letterSpacing: 0.5,
+            background: 'linear-gradient(135deg, #7c3aed, #38bdf8)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
           🎮 Trò Chơi Xác Thực
         </Typography>
 
-        <Typography textAlign="center" color="text.secondary">
-          Hãy nhập đúng email để mở Dashboard
+        <Typography
+          textAlign="center"
+          color="text.secondary"
+          sx={{ position: 'relative', zIndex: 1, mb: 2 }}
+        >
+          Nhập đúng email của bạn để mở Dashboard. Màn hình được thiết kế sinh
+          động hơn.
         </Typography>
 
-        <Typography textAlign="center" color="primary" fontWeight="bold" mt={2}>
+        <Typography
+          textAlign="center"
+          color="primary.light"
+          fontWeight="bold"
+          mt={1}
+          sx={{ position: 'relative', zIndex: 1 }}
+        >
           Gợi ý: {getMaskedEmail(correctEmail, hintLevel)}
         </Typography>
 
         <Typography
           textAlign="center"
-          color={timeLeft <= 10 ? 'error' : 'success.main'}
+          color={timeLeft <= 10 ? 'error.main' : 'success.main'}
           fontWeight="bold"
           mt={1}
+          sx={{ position: 'relative', zIndex: 1 }}
         >
           ⏳ {timeLeft}s
         </Typography>
@@ -150,10 +194,15 @@ export const GamePage = () => {
             correctEmail.length ? (value.length / correctEmail.length) * 100 : 0
           }
           sx={{
-            mt: 2,
-            mb: 3,
-            height: 10,
-            borderRadius: 10,
+            mt: 3,
+            mb: 4,
+            height: 12,
+            borderRadius: 8,
+            backgroundColor: 'rgba(255,255,255,0.08)',
+            '& .MuiLinearProgress-bar': {
+              borderRadius: 8,
+              backgroundImage: 'linear-gradient(90deg, #7c3aed, #38bdf8)',
+            },
           }}
         />
 
@@ -163,27 +212,37 @@ export const GamePage = () => {
           InputProps={{
             readOnly: true,
           }}
-          sx={{ mb: 3 }}
+          sx={{
+            mb: 3,
+            input: {
+              color: 'common.white',
+              fontWeight: 600,
+            },
+          }}
         />
 
         <Stack
           direction="row"
           flexWrap="wrap"
-          gap={0.5}
+          gap={0.75}
           justifyContent="center"
+          sx={{ position: 'relative', zIndex: 1 }}
         >
           {keys.map((char, index) => (
             <Button
               key={`${char}-${index}`}
-              variant="outlined"
+              variant="contained"
+              color="secondary"
               onClick={() => addChar(char)}
               sx={{
-                minWidth: 34,
-                width: 34,
-                height: 34,
+                minWidth: 36,
+                width: 36,
+                height: 36,
                 p: 0,
                 fontSize: 12,
-                fontWeight: 'bold',
+                fontWeight: 700,
+                borderRadius: 2,
+                boxShadow: '0 10px 22px rgba(7, 18, 39, 0.28)',
               }}
             >
               {char}
@@ -195,28 +254,55 @@ export const GamePage = () => {
           direction="row"
           spacing={1}
           justifyContent="center"
-          mt={3}
+          mt={4}
           flexWrap="wrap"
+          sx={{ position: 'relative', zIndex: 1 }}
         >
-          <Button variant="contained" color="success" onClick={submit}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={submit}
+            sx={{ minWidth: 120 }}
+          >
             Kiểm tra
           </Button>
 
-          <Button variant="outlined" color="warning" onClick={removeLastChar}>
+          <Button
+            variant="outlined"
+            color="warning"
+            onClick={removeLastChar}
+            sx={{ minWidth: 120 }}
+          >
             ⌫
           </Button>
 
-          <Button variant="outlined" color="error" onClick={clearAll}>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={clearAll}
+            sx={{ minWidth: 120 }}
+          >
             Xóa hết
           </Button>
 
-          <Button variant="outlined" color="error" onClick={passGame}>
-            bỏ qua
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={passGame}
+            sx={{ minWidth: 120 }}
+          >
+            Bỏ qua
           </Button>
         </Stack>
 
         {error && (
-          <Typography color="error" textAlign="center" mt={2} fontWeight="bold">
+          <Typography
+            color="error.main"
+            textAlign="center"
+            mt={3}
+            fontWeight="bold"
+            sx={{ position: 'relative', zIndex: 1 }}
+          >
             {error}
           </Typography>
         )}

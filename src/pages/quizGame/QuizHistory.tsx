@@ -47,10 +47,9 @@ export default function QuizHistory() {
 
         <Button variant="outlined">Quay lại</Button>
       </Box>
-
       <Grid container spacing={3}>
         {history.map((attempt) => (
-          <Grid size={{ xs: 12, md: 6 }} key={attempt.id}>
+          <Grid item xs={12} md={6} key={attempt.id}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>

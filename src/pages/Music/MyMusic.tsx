@@ -23,15 +23,18 @@ type Track = {
   preview?: string | null;
 };
 export const MyMusic = () => {
-  const {
-    result: { data } = {},
-    isLoading,
-    refetch,
-  } = useList({
+  const { query, result } = useList({
     resource: 'favorite-music',
   });
 
-  const songs = data?.data ?? [];
+  const isLoading = query?.isLoading ?? false;
+  const refetch = query?.refetch ?? (() => Promise.resolve());
+  const responseData = (result as any)?.data;
+  const songs = Array.isArray(responseData?.data)
+    ? responseData.data
+    : Array.isArray(responseData)
+      ? responseData
+      : [];
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -157,7 +160,7 @@ export const MyMusic = () => {
           <audio
             controls
             autoPlay
-            src={currentTrack.preview}
+            src={currentTrack.preview ?? undefined}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
           />

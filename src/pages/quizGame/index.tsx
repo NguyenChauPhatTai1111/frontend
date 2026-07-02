@@ -7,7 +7,13 @@ export default function QuizGamePage() {
   const [quizId, setQuizId] = useState<number>();
 
   if (quizId) {
-    return <QuizPlay quizId={quizId} onBack={() => setQuizId(undefined)} />;
+    return (
+      <QuizPlay
+        quizId={quizId}
+        onBack={() => setQuizId(undefined)}
+        onHistory={() => setQuizId(undefined)}
+      />
+    );
   }
 
   return <QuizList onSelect={setQuizId} />;

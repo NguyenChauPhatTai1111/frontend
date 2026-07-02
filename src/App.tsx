@@ -4,8 +4,6 @@ import { RefineKbar, RefineKbarProvider } from '@refinedev/kbar';
 import { GamePage } from './pages/game';
 import { GameGuard } from './components/GameGuard';
 import { ThemeLayoutV2 } from './components/theme/ThemedLayoutV2';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '@/components/ErrorTheme/createTheme';
 import {
   ErrorComponent,
   RefineSnackbarProvider,
@@ -63,191 +61,197 @@ import Messenger from './pages/messenger/Messager';
 function App() {
   return (
     <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <GitHubBanner />
-        <RefineKbarProvider>
-          <ColorModeContextProvider>
-            <CssBaseline />
-            <GlobalStyles styles={{ html: { WebkitFontSmoothing: 'auto' } }} />
-            <RefineSnackbarProvider>
-              <DevtoolsProvider>
-                <Refine
-                  dataProvider={dataProvider}
-                  notificationProvider={useNotificationProvider}
-                  routerProvider={routerProvider}
-                  authProvider={authProvider}
-                  resources={[
-                    {
-                      name: 'users',
-                      list: '/users',
-                      meta: {
-                        icon: <PeopleIcon />,
-                      },
+      <GitHubBanner />
+      <RefineKbarProvider>
+        <ColorModeContextProvider>
+          <CssBaseline />
+          <GlobalStyles
+            styles={{
+              html: { WebkitFontSmoothing: 'auto' },
+              body: {
+                transition: 'background-color 0.25s ease, color 0.25s ease',
+              },
+            }}
+          />
+          <RefineSnackbarProvider>
+            <DevtoolsProvider>
+              <Refine
+                dataProvider={dataProvider}
+                notificationProvider={useNotificationProvider}
+                routerProvider={routerProvider}
+                authProvider={authProvider}
+                resources={[
+                  {
+                    name: 'users',
+                    list: '/users',
+                    meta: {
+                      icon: <PeopleIcon />,
                     },
-                    {
-                      name: 'music-genres',
-                      list: '/music-genres',
-                      meta: {
-                        icon: <MusicNoteIcon />,
-                      },
+                  },
+                  {
+                    name: 'music-genres',
+                    list: '/music-genres',
+                    meta: {
+                      icon: <MusicNoteIcon />,
                     },
-                    // {
-                    //   name: 'youtube-jobs',
-                    //   list: '/youtube-jobs',
-                    //   create: '/youtube-jobs/create',
-                    //   edit: '/youtube-jobs/edit/:id',
-                    // },
-                    {
-                      name: 'my-music',
-                      list: '/my-music',
-                      meta: {
-                        icon: <FavoriteIcon />,
-                        label: 'My Music',
-                      },
+                  },
+                  // {
+                  //   name: 'youtube-jobs',
+                  //   list: '/youtube-jobs',
+                  //   create: '/youtube-jobs/create',
+                  //   edit: '/youtube-jobs/edit/:id',
+                  // },
+                  {
+                    name: 'my-music',
+                    list: '/my-music',
+                    meta: {
+                      icon: <FavoriteIcon />,
+                      label: 'My Music',
                     },
-                    {
-                      name: 'chatBoxProduct',
-                      list: '/chatBoxProduct',
-                      meta: {
-                        icon: <ChatIcon />,
-                      },
+                  },
+                  {
+                    name: 'chatBoxProduct',
+                    list: '/chatBoxProduct',
+                    meta: {
+                      icon: <ChatIcon />,
                     },
-                    // {
-                    //   name: 'products',
-                    //   list: '/products',
-                    //   create: '/products/create',
-                    //   edit: '/products/edit/:id',
-                    //   show: '/products/show/:id',
-                    //   meta: {
-                    //     icon: <ProductIcon />,
-                    //   },
-                    // },
-                    // {
-                    //   name: 'blog_posts',
-                    //   list: '/blog-posts',
-                    //   create: '/blog-posts/create',
-                    //   edit: '/blog-posts/edit/:id',
-                    //   show: '/blog-posts/show/:id',
-                    //   meta: {
-                    //     icon: <ProductIcon />,
-                    //     canDelete: true,
-                    //   },
-                    // },
-                    {
-                      name: 'categories',
-                      list: '/categories',
-                      create: '/categories/create',
-                      edit: '/categories/edit/:id',
-                      show: '/categories/show/:id',
-                      meta: {
-                        canDelete: true,
-                      },
+                  },
+                  // {
+                  //   name: 'products',
+                  //   list: '/products',
+                  //   create: '/products/create',
+                  //   edit: '/products/edit/:id',
+                  //   show: '/products/show/:id',
+                  //   meta: {
+                  //     icon: <ProductIcon />,
+                  //   },
+                  // },
+                  // {
+                  //   name: 'blog_posts',
+                  //   list: '/blog-posts',
+                  //   create: '/blog-posts/create',
+                  //   edit: '/blog-posts/edit/:id',
+                  //   show: '/blog-posts/show/:id',
+                  //   meta: {
+                  //     icon: <ProductIcon />,
+                  //     canDelete: true,
+                  //   },
+                  // },
+                  {
+                    name: 'categories',
+                    list: '/categories',
+                    create: '/categories/create',
+                    edit: '/categories/edit/:id',
+                    show: '/categories/show/:id',
+                    meta: {
+                      canDelete: true,
                     },
-                    {
-                      name: 'movies',
-                      list: '/movies',
-                      show: '/movies/:slug',
-                      meta: {
-                        icon: <MovieIcon />,
-                        canDelete: true,
-                      },
+                  },
+                  {
+                    name: 'movies',
+                    list: '/movies',
+                    show: '/movies/:slug',
+                    meta: {
+                      icon: <MovieIcon />,
+                      canDelete: true,
                     },
-                    {
-                      name: 'Messenger',
-                      list: '/messenger',
-                      meta: {
-                        icon: <MessageIcon />,
-                        canDelete: true,
-                      },
+                  },
+                  {
+                    name: 'Messenger',
+                    list: '/messenger',
+                    meta: {
+                      icon: <MessageIcon />,
+                      canDelete: true,
                     },
-                    {
-                      name: 'game-ai',
-                      list: '/game-ai',
-                      meta: {
-                        icon: <SportsEsportsIcon />,
-                      },
+                  },
+                  {
+                    name: 'game-ai',
+                    list: '/game-ai',
+                    meta: {
+                      icon: <SportsEsportsIcon />,
                     },
-                    {
-                      name: 'quiz-game',
-                      list: '/quiz-game',
-                      meta: {
-                        label: 'Quiz',
-                        icon: <QuizIcon />,
-                      },
+                  },
+                  {
+                    name: 'quiz-game',
+                    list: '/quiz-game',
+                    meta: {
+                      label: 'Quiz',
+                      icon: <QuizIcon />,
                     },
-                    {
-                      name: 'quiz-game',
-                      list: '/quiz-game',
-                      meta: {
-                        label: 'Quiz Game',
-                        parent: 'quiz-game',
-                        icon: <QuizIcon />,
-                      },
+                  },
+                  {
+                    name: 'quiz-game',
+                    list: '/quiz-game',
+                    meta: {
+                      label: 'Quiz Game',
+                      parent: 'quiz-game',
+                      icon: <QuizIcon />,
                     },
-                    {
-                      name: 'quiz-history',
-                      list: '/quiz-game/history',
-                      meta: {
-                        label: 'Quiz History',
-                        parent: 'quiz-game',
-                        icon: <HistoryIcon />,
-                      },
+                  },
+                  {
+                    name: 'quiz-history',
+                    list: '/quiz-game/history',
+                    meta: {
+                      label: 'Quiz History',
+                      parent: 'quiz-game',
+                      icon: <HistoryIcon />,
                     },
-                  ]}
-                  options={{
-                    syncWithLocation: true,
-                    warnWhenUnsavedChanges: true,
-                    projectId: 'RdZJDB-tFLIDc-rMQ7LT',
-                  }}
-                >
-                  <Routes>
-                    {/* Game riêng không có Layout */}
-                    <Route
-                      path="/game"
-                      element={
-                        <Authenticated
-                          key="authenticated-game"
-                          fallback={<CatchAllNavigate to="/login" />}
-                        >
-                          <GamePage />
-                        </Authenticated>
-                      }
-                    />
+                  },
+                ]}
+                options={{
+                  syncWithLocation: true,
+                  warnWhenUnsavedChanges: true,
+                  projectId: 'RdZJDB-tFLIDc-rMQ7LT',
+                }}
+              >
+                <Routes>
+                  {/* Game riêng không có Layout */}
+                  <Route
+                    path="/game"
+                    element={
+                      <Authenticated
+                        key="authenticated-game"
+                        fallback={<CatchAllNavigate to="/login" />}
+                      >
+                        <GamePage />
+                      </Authenticated>
+                    }
+                  />
 
-                    {/* Các trang admin có menu */}
-                    <Route
-                      element={
-                        <Authenticated
-                          key="authenticated-inner"
-                          fallback={<CatchAllNavigate to="/login" />}
-                        >
-                          <ThemeLayoutV2 />
-                        </Authenticated>
-                      }
-                    >
-                      <Route index element={<CatchAllNavigate to="/game" />} />
+                  {/* Các trang admin có menu */}
+                  <Route
+                    element={
+                      <Authenticated
+                        key="authenticated-inner"
+                        fallback={<CatchAllNavigate to="/login" />}
+                      >
+                        <ThemeLayoutV2 />
+                      </Authenticated>
+                    }
+                  >
+                    <Route index element={<CatchAllNavigate to="/game" />} />
 
-                      <Route path="/users">
-                        <Route
-                          index
-                          element={
-                            <GameGuard>
-                              <UserList />
-                            </GameGuard>
-                          }
-                        />
-                      </Route>
-                      <Route path="/chatBoxProduct">
-                        <Route
-                          index
-                          element={
-                            <GameGuard>
-                              <ChatBoxProduct />
-                            </GameGuard>
-                          }
-                        />
-                      </Route>
-                      {/* <Route path="/products">
+                    <Route path="/users">
+                      <Route
+                        index
+                        element={
+                          <GameGuard>
+                            <UserList />
+                          </GameGuard>
+                        }
+                      />
+                    </Route>
+                    <Route path="/chatBoxProduct">
+                      <Route
+                        index
+                        element={
+                          <GameGuard>
+                            <ChatBoxProduct />
+                          </GameGuard>
+                        }
+                      />
+                    </Route>
+                    {/* <Route path="/products">
                         <Route
                           index
                           element={
@@ -266,89 +270,88 @@ function App() {
                           }
                         />
                       </Route> */}
-                      <Route path="/game-ai" element={<GameAI />} />
-                      <Route path="/quiz-game">
-                        <Route
-                          index
-                          element={
-                            <GameGuard>
-                              <QuizGamePage />
-                            </GameGuard>
-                          }
-                        />
+                    <Route path="/game-ai" element={<GameAI />} />
+                    <Route path="/quiz-game">
+                      <Route
+                        index
+                        element={
+                          <GameGuard>
+                            <QuizGamePage />
+                          </GameGuard>
+                        }
+                      />
 
-                        <Route
-                          path="history"
-                          element={
-                            <GameGuard>
-                              <QuizHistory />
-                            </GameGuard>
-                          }
-                        />
-                      </Route>
+                      <Route
+                        path="history"
+                        element={
+                          <GameGuard>
+                            <QuizHistory />
+                          </GameGuard>
+                        }
+                      />
+                    </Route>
 
-                      <Route path="/music-genres">
-                        <Route index element={<MusicGenreList />} />
+                    <Route path="/music-genres">
+                      <Route index element={<MusicGenreList />} />
 
-                        <Route path=":id" element={<MusicGenreDetail />} />
-                      </Route>
-                      <Route path="/my-music">
-                        <Route index element={<MyMusic />} />
-                      </Route>
+                      <Route path=":id" element={<MusicGenreDetail />} />
+                    </Route>
+                    <Route path="/my-music">
+                      <Route index element={<MyMusic />} />
+                    </Route>
 
-                      {/* <Route path="/blog-posts">
+                    {/* <Route path="/blog-posts">
                         <Route index element={<BlogPostList />} />
                         <Route path="create" element={<BlogPostCreate />} />
                         <Route path="edit/:id" element={<BlogPostEdit />} />
                         <Route path="show/:id" element={<BlogPostShow />} />
                       </Route> */}
 
-                      <Route path="/categories">
-                        <Route index element={<UserList />} />
-                        <Route path="create" element={<CategoryCreate />} />
-                        <Route path="edit/:id" element={<CategoryEdit />} />
-                        <Route path="show/:id" element={<CategoryShow />} />
-                      </Route>
-
-                      <Route path="/movies">
-                        <Route index element={<MoviesList />} />
-                        <Route path="/movies/:slug" element={<MovieDetail />} />
-                      </Route>
-
-                      <Route path="*" element={<ErrorComponent />} />
+                    <Route path="/categories">
+                      <Route index element={<UserList />} />
+                      <Route path="create" element={<CategoryCreate />} />
+                      <Route path="edit/:id" element={<CategoryEdit />} />
+                      <Route path="show/:id" element={<CategoryShow />} />
                     </Route>
-                    <Route path="/messenger">
-                      <Route index element={<Messenger />} />
+
+                    <Route path="/movies">
+                      <Route index element={<MoviesList />} />
+                      <Route path="/movies/:slug" element={<MovieDetail />} />
                     </Route>
-                    {/* Login */}
+
+                    <Route path="*" element={<ErrorComponent />} />
+                  </Route>
+                  <Route path="/messenger">
+                    <Route index element={<Messenger />} />
+                  </Route>
+                  {/* Login */}
+                  <Route
+                    element={
+                      <Authenticated
+                        key="authenticated-outer"
+                        fallback={<Outlet />}
+                      >
+                        <NavigateToResource resource="users" />
+                      </Authenticated>
+                    }
+                  >
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
                     <Route
-                      element={
-                        <Authenticated
-                          key="authenticated-outer"
-                          fallback={<Outlet />}
-                        >
-                          <NavigateToResource resource="users" />
-                        </Authenticated>
-                      }
-                    >
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/register" element={<Register />} />
-                      <Route
-                        path="/forgot-password"
-                        element={<ForgotPassword />}
-                      />
-                    </Route>
-                  </Routes>
-                  <RefineKbar />
-                  <UnsavedChangesNotifier />
-                  <DocumentTitleHandler />
-                </Refine>
-                <DevtoolsPanel />
-              </DevtoolsProvider>
-            </RefineSnackbarProvider>
-          </ColorModeContextProvider>
-        </RefineKbarProvider>
-      </ThemeProvider>
+                      path="/forgot-password"
+                      element={<ForgotPassword />}
+                    />
+                  </Route>
+                </Routes>
+                <RefineKbar />
+                <UnsavedChangesNotifier />
+                <DocumentTitleHandler />
+              </Refine>
+              <DevtoolsPanel />
+            </DevtoolsProvider>
+          </RefineSnackbarProvider>
+        </ColorModeContextProvider>
+      </RefineKbarProvider>
     </BrowserRouter>
   );
 }

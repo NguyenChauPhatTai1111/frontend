@@ -19,11 +19,7 @@ interface Props {
 
 export const UserEditModal = ({ open, onClose, userId }: Props) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const {
-    saveButtonProps,
-    refineCore: { queryResult },
-    register,
-  } = useForm({
+  const { saveButtonProps, register } = useForm({
     refineCoreProps: {
       resource: 'users',
       action: 'edit',
@@ -42,8 +38,6 @@ export const UserEditModal = ({ open, onClose, userId }: Props) => {
     },
   });
 
-  const user = queryResult?.data?.data;
-
   return (
     <>
       <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -53,7 +47,7 @@ export const UserEditModal = ({ open, onClose, userId }: Props) => {
           <Stack spacing={2} sx={{ mt: 1 }}>
             <TextField
               label="Name"
-              defaultValue={user?.name}
+              defaultValue=""
               InputLabelProps={{
                 shrink: true,
               }}
@@ -63,7 +57,7 @@ export const UserEditModal = ({ open, onClose, userId }: Props) => {
 
             <TextField
               label="Email"
-              defaultValue={user?.email}
+              defaultValue=""
               InputLabelProps={{
                 shrink: true,
               }}
@@ -73,7 +67,7 @@ export const UserEditModal = ({ open, onClose, userId }: Props) => {
 
             <TextField
               label="role"
-              defaultValue={user?.role}
+              defaultValue=""
               InputLabelProps={{
                 shrink: true,
               }}

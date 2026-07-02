@@ -10,9 +10,14 @@ export interface Question {
   answers: Answer[];
 }
 
-export interface Quiz {
+export interface QuizListItem {
   id: number;
   title: string;
   description: string;
+  image?: string;
+  questions_count?: number;
+}
+
+export interface Quiz extends QuizListItem {
   questions: Question[];
 }

@@ -45,8 +45,6 @@ export const MoviesList = () => {
 
         const res = await searchMoviesApi(keyword);
 
-        console.log('SEARCH', res);
-
         setMovies(res.data?.items ?? []);
       } catch (error) {
         console.error(error);
@@ -287,15 +285,7 @@ export const MoviesList = () => {
       >
         {movies.map((movie: any, index) => (
           <Card onClick={() => navigate(`/movies/${movie.slug}`)}>
-            <Grid
-              key={movie.slug ?? index}
-              size={{
-                xs: 6,
-                sm: 4,
-                md: 3,
-                lg: 2.4,
-              }}
-            >
+            <Grid key={movie.slug ?? index} item xs={6} sm={4} md={3} lg={2.4}>
               <motion.div
                 initial={{
                   opacity: 0,

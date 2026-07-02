@@ -10,12 +10,7 @@ import {
   LinearProgress,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import {
-  getQuizDetail,
-  submitQuiz,
-  getQuizMarks,
-  toggleQuizMark,
-} from '@/hooks/quiz.service';
+import { getQuizDetail, submitQuiz, getQuizMarks } from '@/hooks/quiz.service';
 import ModalFinishTest from './modalFinishText';
 import QuizReview from './QuizReview';
 import QuizResult from './finished';
@@ -25,10 +20,10 @@ import QuizAiHelper from './QuizAI';
 interface Props {
   quizId: number;
   onBack: () => void;
-  onHistory: () => void;
+  onHistory?: () => void;
 }
 
-export default function QuizPlay({ quizId, onBack }: Props) {
+export default function QuizPlay({ quizId, onBack, onHistory }: Props) {
   const [quiz, setQuiz] = useState<any>(null);
   const TOTAL_TIME = 10 * 60; // 10 phút
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
@@ -42,7 +37,6 @@ export default function QuizPlay({ quizId, onBack }: Props) {
   const isLocked = timeLeft <= 0;
   const [marked, setMarked] = useState<Record<number, boolean>>({});
   const [aiUsed, setAiUsed] = useState(false);
-  const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [noti, setNoti] = useState({
     open: false,
     message: '',
